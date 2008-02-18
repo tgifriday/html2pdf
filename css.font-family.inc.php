@@ -37,11 +37,11 @@ class CSSFontFamily extends CSSSubFieldProperty {
     return "times";
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_FONT_FAMILY;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'font-family';
   }
 

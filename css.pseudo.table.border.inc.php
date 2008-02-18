@@ -27,11 +27,11 @@ class CSSPseudoTableBorder extends CSSPropertyHandler {
     return $this->_defaultValue->copy();
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_TABLE_BORDER;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-table-border';
   }
 

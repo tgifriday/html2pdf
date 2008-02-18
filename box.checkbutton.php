@@ -67,7 +67,7 @@ class CheckBox extends GenericFormattedBox {
     $box =& new CheckBox($root->has_attribute('checked'), 
                          $root->get_attribute('name'),
                          $value);
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
     $box->setup_dimensions();
     return $box;
   }

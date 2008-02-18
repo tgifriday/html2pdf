@@ -32,7 +32,6 @@ class ValueContent {
 
     while ($string !== '') {
       $result = ValueContentItem::parse($string);
-
       $item =& $result['item'];
       $rest = $result['rest'];
 

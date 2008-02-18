@@ -301,7 +301,7 @@ class CheckGD extends CheckBinaryRequired {
       $gd_version = $gd_version_string;
     };
 
-    if (!function_exists('imagecreatetruecolor')) {
+    if ($gd_version < "2.0.1") {
       $this->setMessage("GD version 2.0.1+ required for 'imagecreatetruecolor' function to work");
       return;
     };
@@ -404,84 +404,12 @@ class CheckPCREBacktrack extends CheckBinaryRecommended {
  * permissions on cache directory
  */
 class CheckPermissionsCache extends CheckBinaryRequired {
-  function title() {
-    return "Permissions on 'cache' subdirectory";
-  }
-
-  function description() {
-    return "Script should have full access to 'cache' subdirectory to keep cached files there";
-  }
-
-  function run() {
-    if (!file_exists(HTML2PS_DIR.'/cache/')) {
-      $this->setMessage("'cache' subdirectory is missing");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_readable(HTML2PS_DIR.'/cache/')) {
-      $this->setMessage("'cache' subdirectory is not readable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_writable(HTML2PS_DIR.'/cache/')) {
-      $this->setMessage("'cache' subdirectory is not writable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_executable(HTML2PS_DIR.'/cache/') && PHP_OS != "WINNT") {
-      $this->setMessage("'cache' subdirectory is not executable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    $this->setMessage("'cache' subdirectory is fully accessible to the script");
-    $this->setSuccess(true);
-  }
 }
 
 /**
  * Permissions on 'out' directory
  */
 class CheckPermissionsOut extends CheckBinaryRecommended {
-  function title() {
-    return "Permissions on 'out' subdirectory";
-  }
-
-  function description() {
-    return "Script should have full access to 'out' subdirectory to put generated files there";
-  }
-
-  function run() {
-    if (!file_exists(HTML2PS_DIR.'/out/')) {
-      $this->setMessage("'out' subdirectory is missing");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_readable(HTML2PS_DIR.'/out/')) {
-      $this->setMessage("'out' subdirectory is not readable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_writable(HTML2PS_DIR.'/out/')) {
-      $this->setMessage("'out' subdirectory is not writable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    if (!is_executable(HTML2PS_DIR.'/out/') && PHP_OS != "WINNT") {
-      $this->setMessage("'out' subdirectory is not executable");
-      $this->setSuccess(false);
-      return;
-    };
-
-    $this->setMessage("'out' subdirectory is fully accessible to the script");
-    $this->setSuccess(true);
-  }
 }
 
 /**

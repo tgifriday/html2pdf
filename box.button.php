@@ -56,7 +56,7 @@ class ButtonBox extends InlineControlBox {
     };
 
     $box =& new ButtonBox();
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
 
     /**
      * If button width is not constrained, then we'll add some space around the button text

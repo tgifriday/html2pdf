@@ -6,19 +6,19 @@ class CSSBorderRightColor extends CSSSubProperty {
     $this->CSSSubProperty($owner);
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     $owner_value->right->setColor($value);
   }
 
-  function get_value(&$owner_value) {
+  function getValue(&$owner_value) {
     return $owner_value->right->color->copy();
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER_RIGHT_COLOR;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border-right-color';
   }
 

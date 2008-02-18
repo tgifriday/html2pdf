@@ -69,11 +69,11 @@ class LineBox {
     $fake_box->put_height($this->top - $this->bottom);
 
     // Setup padding value
-    $fake_box->setCSSProperty(CSS_PADDING, $box->get_css_property(CSS_PADDING));
+    $fake_box->setCSSProperty(CSS_PADDING, $box->getCSSProperty(CSS_PADDING));
 
     // Setup fake box border and background
-    $fake_box->setCSSProperty(CSS_BACKGROUND, $box->get_css_property(CSS_BACKGROUND));
-    $fake_box->setCSSProperty(CSS_BORDER, $box->get_css_property(CSS_BORDER));
+    $fake_box->setCSSProperty(CSS_BACKGROUND, $box->getCSSProperty(CSS_BACKGROUND));
+    $fake_box->setCSSProperty(CSS_BORDER, $box->getCSSProperty(CSS_BORDER));
     
     return $fake_box;
   }
@@ -93,15 +93,15 @@ class InlineBox extends GenericInlineBox {
   function &create(&$root, &$pipeline) {
     // Create contents of this inline box
     if ($root->node_type() == XML_TEXT_NODE) {
-      $css_state =& $pipeline->get_current_css_state();
+      $css_state =& $pipeline->getCurrentCSSState();
       return InlineBox::create_from_text($root->content, 
-                                         $css_state->get_property(CSS_WHITE_SPACE), 
+                                         $css_state->getProperty(CSS_WHITE_SPACE), 
                                          $pipeline);
 
     } else {
       $box =& new InlineBox();
 
-      $css_state =& $pipeline->get_current_css_state();
+      $css_state =& $pipeline->getCurrentCSSState();
 
       $box->readCSS($css_state);
 
@@ -119,7 +119,7 @@ class InlineBox extends GenericInlineBox {
       //
       if ($box->is_null()) {
         $css_state->pushState();
-        $css_state->set_property(CSS_FONT_SIZE, Value::fromData(0.01, UNIT_PT));
+        $css_state->setProperty(CSS_FONT_SIZE, Value::fromData(0.01, UNIT_PT));
 
         $whitespace = WhitespaceBox::create($pipeline);
         $whitespace->readCSS($css_state);
@@ -135,10 +135,10 @@ class InlineBox extends GenericInlineBox {
 
   function &create_from_text($text, $white_space, &$pipeline) {
     $box =& new InlineBox();
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
 
     // Apply/inherit text-related CSS properties 
-    $css_state =& $pipeline->get_current_css_state();
+    $css_state =& $pipeline->getCurrentCSSState();
     $css_state->pushDefaultTextState();
 
     require_once(HTML2PS_DIR.'inline.content.builder.factory.php');
@@ -242,7 +242,7 @@ class InlineBox extends GenericInlineBox {
   }
 
   function show(&$driver) {
-    if ($this->get_css_property(CSS_POSITION) == POSITION_RELATIVE) {
+    if ($this->getCSSProperty(CSS_POSITION) == POSITION_RELATIVE) {
       // Postpone
       return true;
     };
@@ -261,8 +261,8 @@ class InlineBox extends GenericInlineBox {
       $line_box = $this->get_line_box($i);
       $fake_box = $line_box->fake_box($this);
 
-      $background = $this->get_css_property(CSS_BACKGROUND);
-      $border     = $this->get_css_property(CSS_BORDER);
+      $background = $this->getCSSProperty(CSS_BACKGROUND);
+      $border     = $this->getCSSProperty(CSS_BORDER);
 
       $background->show($driver, $fake_box);
       $border->show($driver, $fake_box);
@@ -417,7 +417,7 @@ class InlineBox extends GenericInlineBox {
      * We should not remove such anchors, as this will break internal links 
      * in the document.
      */
-    $dest = $this->get_css_property(CSS_HTML2PS_LINK_DESTINATION);
+    $dest = $this->getCSSProperty(CSS_HTML2PS_LINK_DESTINATION);
     if (!is_null($dest)) { 
       return; 
     };
@@ -469,7 +469,7 @@ class InlineBox extends GenericInlineBox {
     }
 
     // Apply width constraint to min width. Return maximal value
-    $wc = $this->get_css_property(CSS_WIDTH);
+    $wc = $this->getCSSProperty(CSS_WIDTH);
     $min_width = max($minw, $wc->apply($minw, $this->parent->get_width())) + $this->_get_hor_extra();
 
     $this->_cache[CACHE_MIN_WIDTH] = $min_width;

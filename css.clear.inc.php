@@ -21,11 +21,11 @@ class CSSClear extends CSSPropertyStringSet {
     return CLEAR_NONE; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_CLEAR;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'clear';
   }
 }

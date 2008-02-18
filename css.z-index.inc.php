@@ -15,11 +15,11 @@ class CSSZIndex extends CSSPropertyHandler {
     return (int)$value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_Z_INDEX;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'z-index';
   }
 }

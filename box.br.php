@@ -58,7 +58,7 @@ class BRBox extends GenericBox {
    */
   function &create(&$pipeline) {
     $box =& new BRBox();
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
     return $box;
   }
 
@@ -125,7 +125,7 @@ class BRBox extends GenericBox {
       // Note that _current_y should be modified before 'close_line' call, as it checks for 
       // left-floating boxes, causing an issues if line bottom will be placed below
       // float while line top is above float bottom margin
-      $font = $this->get_css_property(CSS_FONT);
+      $font = $this->getCSSProperty(CSS_FONT);
       $fs = $font->size;
       $parent->_current_y = min($this->get_bottom(), 
                                 $parent->_current_y - $font->line_height->apply($fs->getPoints()));

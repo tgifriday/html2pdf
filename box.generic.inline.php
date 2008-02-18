@@ -7,7 +7,7 @@ class GenericInlineBox extends GenericContainerBox {
   // @todo this code is duplicated in box.block.php
   //
   function reflow(&$parent, &$context) {
-    switch ($this->get_css_property(CSS_POSITION)) {
+    switch ($this->getCSSProperty(CSS_POSITION)) {
     case POSITION_STATIC:
       return $this->reflow_static($parent, $context);
 
@@ -62,7 +62,7 @@ class GenericInlineBox extends GenericContainerBox {
       $first = $parent->get_first();
 
       // FIXME: what's this? This condition is invariant!
-      $text_indent = $parent->get_css_property(CSS_TEXT_INDENT);
+      $text_indent = $parent->getCSSProperty(CSS_TEXT_INDENT);
       $indent_offset = ($first->uid == $this->uid || 1) ? $text_indent->calculate($parent) : 0;
 
       if ($parent->_current_x > $parent->get_left() + $indent_offset + EPSILON) {

@@ -16,11 +16,11 @@ class CSSTableLayout extends CSSPropertyStringSet {
     return TABLE_LAYOUT_AUTO; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_TABLE_LAYOUT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'table-layout';
   }
 }

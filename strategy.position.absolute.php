@@ -22,8 +22,8 @@ class StrategyPositionAbsolute {
    * box had 'position: static'
    */
   function _positionAbsoluteVertically(&$box, &$containing_block) {
-    $bottom = $box->get_css_property(CSS_BOTTOM);
-    $top    = $box->get_css_property(CSS_TOP);
+    $bottom = $box->getCSSProperty(CSS_BOTTOM);
+    $top    = $box->getCSSProperty(CSS_TOP);
 
     if (!$top->isAuto()) {
       if ($top->isPercentage()) {
@@ -41,8 +41,8 @@ class StrategyPositionAbsolute {
       $box->put_top($containing_block['bottom'] + $bottom_value + $box->get_extra_bottom() + $box->get_height());
     };
 
-//     $bottom = $box->get_css_property(CSS_BOTTOM);
-//     $top    = $box->get_css_property(CSS_TOP);
+//     $bottom = $box->getCSSProperty(CSS_BOTTOM);
+//     $top    = $box->getCSSProperty(CSS_TOP);
 //     if ($top->isAuto() && !$bottom->isAuto()) {
 //       $box->offset(0, $box->get_height());
 //     };
@@ -54,8 +54,8 @@ class StrategyPositionAbsolute {
    * method which could be used if this box had 'position: static'
    */
   function _positionAbsoluteHorizontally(&$box, &$containing_block) {
-    $left  = $box->get_css_property(CSS_LEFT);
-    $right = $box->get_css_property(CSS_RIGHT);
+    $left  = $box->getCSSProperty(CSS_LEFT);
+    $right = $box->getCSSProperty(CSS_RIGHT);
 
     if (!$left->isAuto()) { 
       if ($left->isPercentage()) {
@@ -70,13 +70,11 @@ class StrategyPositionAbsolute {
       } else {
         $right_value = $right->getPoints();
       };
-
-      $left = $containing_block['right'] - $right_value - $box->get_extra_right() - $box->get_width();
-      $box->put_left($left);
+      $box->put_left($containing_block['right'] - $right_value - $box->get_extra_right() - $box->get_width());
     };
 
-//     $right = $box->get_css_property(CSS_RIGHT);
-//     $left  = $box->get_css_property(CSS_LEFT);
+//     $right = $box->getCSSProperty(CSS_RIGHT);
+//     $left  = $box->getCSSProperty(CSS_LEFT);
 //     if ($left->isAuto() && !$right->isAuto()) {
 //       $box->offset(-$box->get_width(), 0);
 //     };

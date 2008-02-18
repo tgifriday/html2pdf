@@ -24,11 +24,11 @@ class CSSTextIndent extends CSSPropertyHandler {
     };
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_TEXT_INDENT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'text-indent';
   }
 }

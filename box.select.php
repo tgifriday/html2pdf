@@ -46,7 +46,7 @@ class SelectBox extends InlineControlBox {
     $content = str_pad($content, $size*SIZE_SPACE_KOEFF + SELECT_SPACE_PADDING, ' ');
 
     $box =& new SelectBox($name, $value, $options);
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
     $box->setup_content($content, $pipeline);
 
     return $box;
@@ -91,7 +91,7 @@ class SelectBox extends InlineControlBox {
   }
 
   function show_button(&$driver) {
-    $padding = $this->get_css_property(CSS_PADDING);
+    $padding = $this->getCSSProperty(CSS_PADDING);
     $button_height = $this->get_height() + $padding->top->value + $padding->bottom->value;
 
     // Show arrow button box

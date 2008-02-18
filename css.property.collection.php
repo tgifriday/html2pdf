@@ -16,8 +16,8 @@ class CSSPropertyCollection {
   function apply(&$state) {
     $properties = $this->getPropertiesRaw();
     foreach ($properties as $property) {
-      $key   = $property->get_code();
-      $value = $property->get_value();
+      $key   = $property->getCode();
+      $value = $property->getValue();
       
       $handler =& CSS::get_handler($key);
       $handler->replace($value, $state);
@@ -39,16 +39,16 @@ class CSSPropertyCollection {
     return $collection;
   }
 
-  function add_property($property) {
+  function addProperty($property) {
     $this->_max_priority ++;
 
-    $code = $property->get_code();
+    $code = $property->getCode();
 
     /**
      * Important properties shoud not be overridden with non-important ones
      */
-    if ($this->is_important($code) &&
-        !$property->is_important()) { 
+    if ($this->isImportant($code) &&
+        !$property->isImportant()) { 
       return;
     };
 
@@ -83,14 +83,14 @@ class CSSPropertyCollection {
     return $this->_properties;
   }
 
-  function is_important($code) { 
+  function isImportant($code) { 
     if (!isset($this->_positions[$code])) { 
       return false; 
     };
-    return $this->_properties[$this->_positions[$code]]->is_important();
+    return $this->_properties[$this->_positions[$code]]->isImportant();
   }
 
-  function &get_property_value($code) {
+  function &getPropertyValue($code) {
     if (!isset($this->_positions[$code])) {
       $null = null;
       return $null;
@@ -102,11 +102,11 @@ class CSSPropertyCollection {
     };
 
     $property =& $this->_properties[$this->_positions[$code]];
-    return $property->get_value();
+    return $property->getValue();
   }
 
-  function set_property_value($code, $value) {
-    $this->_properties[$this->_positions[$code]]->set_value($value);
+  function setPropertyValue($code, $value) {
+    $this->_properties[$this->_positions[$code]]->setValue($value);
   }
 
   /**
@@ -116,7 +116,7 @@ class CSSPropertyCollection {
   function merge($collection) {
     $properties = $collection->getPropertiesSortedByPriority();
     foreach ($properties as $property) {
-      $this->add_property($property);
+      $this->addProperty($property);
     };
   }
 }

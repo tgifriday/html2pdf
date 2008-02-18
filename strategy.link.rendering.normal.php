@@ -5,7 +5,7 @@ class StrategyLinkRenderingNormal {
   }
 
   function apply(&$box, &$driver) {
-    $link_target = $box->get_css_property(CSS_HTML2PS_LINK_TARGET);
+    $link_target = $box->getCSSProperty(CSS_HTML2PS_LINK_TARGET);
 
     if (CSSPseudoLinkTarget::is_external_link($link_target)) {
       $driver->add_link($box->get_left(), 

@@ -50,11 +50,11 @@ class CSSSize extends CSSPropertyHandler {
                  'landscape' => false);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_SIZE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'size';
   }
 }

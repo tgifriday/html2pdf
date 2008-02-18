@@ -6,7 +6,7 @@ class CSSBorderLeftWidth extends CSSSubProperty {
     $this->CSSSubProperty($owner);
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     if ($value != CSS_PROPERTY_INHERIT) {
       $owner_value->left->width = $value->copy();
     } else {
@@ -14,15 +14,15 @@ class CSSBorderLeftWidth extends CSSSubProperty {
     };
   }
 
-  function get_value(&$owner_value) {
+  function getValue(&$owner_value) {
     return $owner_value->left->width;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER_LEFT_WIDTH;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border-left-width';
   }
 

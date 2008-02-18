@@ -7,11 +7,11 @@ define('BR_REPEAT_Y',2);
 define('BR_NO_REPEAT',3);
 
 class CSSBackgroundRepeat extends CSSSubFieldProperty {
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BACKGROUND_REPEAT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'background-repeat';
   }
 

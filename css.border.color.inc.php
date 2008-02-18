@@ -15,7 +15,7 @@ class CSSBorderColor extends CSSSubProperty {
                                            new Color(array(0,0,0), true));
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     if ($value != CSS_PROPERTY_INHERIT) {
       $owner_value->top->setColor($value->top);
       $owner_value->right->setColor($value->right);
@@ -29,18 +29,18 @@ class CSSBorderColor extends CSSSubProperty {
     };
   }
 
-  function get_value(&$owner_value) {
+  function getValue(&$owner_value) {
     return new BorderColor($owner_value->top->color, 
                            $owner_value->right->color, 
                            $owner_value->bottom->color, 
                            $owner_value->left->color);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER_COLOR;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border-color';
   }
 

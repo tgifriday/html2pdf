@@ -6,6 +6,8 @@ require_once(HTML2PS_DIR.'box.inline.simple.php');
 // TODO: from my POV, it wll be better to pass the font- or CSS-controlling object to the constructor
 // instead of using globally visible functions in 'show'.
 
+define('SYMBOL_NBSP', chr(160));
+
 class TextBox extends SimpleInlineBox {
   var $words;
   var $encodings;
@@ -85,7 +87,7 @@ class TextBox extends SimpleInlineBox {
     $height     = $this->get_height();
     $under      = $height - $this->default_baseline;
 
-    $line_height = $this->get_css_property(CSS_LINE_HEIGHT);
+    $line_height = $this->getCSSProperty(CSS_LINE_HEIGHT);
 
     if ($height > 0) {
       $scale = $line_height->apply($this->ascender + $this->descender) / ($this->ascender + $this->descender);
@@ -107,7 +109,7 @@ class TextBox extends SimpleInlineBox {
 
     $font_resolver =& $viewport->get_font_resolver();
 
-    $font = $this->get_css_property(CSS_FONT);
+    $font = $this->getCSSProperty(CSS_FONT);
 
     $typeface = $font_resolver->getTypefaceName($font->family, 
                                                 $font->weight, 
@@ -120,7 +122,7 @@ class TextBox extends SimpleInlineBox {
   }
 
   function add_subword($raw_subword, $encoding, $hyphens) {
-    $text_transform = $this->get_css_property(CSS_TEXT_TRANSFORM);
+    $text_transform = $this->getCSSProperty(CSS_TEXT_TRANSFORM);
     switch ($text_transform) {
     case CSS_TEXT_TRANSFORM_CAPITALIZE:
       $subword = ucwords($raw_subword);
@@ -149,10 +151,10 @@ class TextBox extends SimpleInlineBox {
 
   function &create_empty(&$pipeline) {
     $box =& new TextBox();
-    $css_state = $pipeline->get_current_css_state();
+    $css_state = $pipeline->getCurrentCSSState();
 
     $box->readCSS($css_state);
-    $css_state = $pipeline->get_current_css_state();
+    $css_state = $pipeline->getCurrentCSSState();
 
     return $box;
   }
@@ -231,7 +233,7 @@ class TextBox extends SimpleInlineBox {
 
       $first = $parent->get_first();
 
-      $ti = $this->get_css_property(CSS_TEXT_INDENT);
+      $ti = $this->getCSSProperty(CSS_TEXT_INDENT);
       $indent_offset = $ti->calculate($parent);
 
       if ($parent->_current_x > $parent->get_left() + $indent_offset + EPSILON) {
@@ -373,7 +375,7 @@ class TextBox extends SimpleInlineBox {
     /**
      * Setup box size
      */
-    $font = $this->get_css_property(CSS_FONT_SIZE);
+    $font = $this->getCSSProperty(CSS_FONT_SIZE);
     $font_size = $font->getPoints();
 
     // Both ascender and descender should make $font_size 
@@ -412,7 +414,7 @@ class TextBox extends SimpleInlineBox {
       $this->width = 0;
     };
 
-    $letter_spacing = $this->get_css_property(CSS_LETTER_SPACING);
+    $letter_spacing = $this->getCSSProperty(CSS_LETTER_SPACING);
 
     if ($letter_spacing->getPoints() != 0) {
       $this->_widths = array();
@@ -438,7 +440,7 @@ class TextBox extends SimpleInlineBox {
     /**
      * Check if font-size have been set to 0; in this case we should not draw this box at all
      */
-    $font_size = $this->get_css_property(CSS_FONT_SIZE);
+    $font_size = $this->getCSSProperty(CSS_FONT_SIZE);
     if ($font_size->getPoints() == 0) { 
       return true; 
     }
@@ -471,16 +473,16 @@ class TextBox extends SimpleInlineBox {
     // draw generic box
     parent::show($driver);
 
-    $font_size = $this->get_css_property(CSS_FONT_SIZE);
+    $font_size = $this->getCSSProperty(CSS_FONT_SIZE);
     
-    $decoration = $this->get_css_property(CSS_TEXT_DECORATION);
+    $decoration = $this->getCSSProperty(CSS_TEXT_DECORATION);
     
     // draw text decoration
     $driver->decoration($decoration['U'],
                         $decoration['O'],
                         $decoration['T']);
 
-    $letter_spacing = $this->get_css_property(CSS_LETTER_SPACING);
+    $letter_spacing = $this->getCSSProperty(CSS_LETTER_SPACING);
     
     // Output text with the selected font
     // note that we're using $default_baseline; 
@@ -561,16 +563,16 @@ class TextBox extends SimpleInlineBox {
     // draw generic box
     parent::show($driver);
 
-    $font_size = $this->get_css_property(CSS_FONT_SIZE);
+    $font_size = $this->getCSSProperty(CSS_FONT_SIZE);
     
-    $decoration = $this->get_css_property(CSS_TEXT_DECORATION);
+    $decoration = $this->getCSSProperty(CSS_TEXT_DECORATION);
     
     // draw text decoration
     $driver->decoration($decoration['U'],
                         $decoration['O'],
                         $decoration['T']);
 
-    $letter_spacing = $this->get_css_property(CSS_LETTER_SPACING);
+    $letter_spacing = $this->getCSSProperty(CSS_LETTER_SPACING);
     
     if ($letter_spacing->getPoints() == 0) {
       // Output text with the selected font
@@ -623,7 +625,7 @@ class TextBox extends SimpleInlineBox {
   }
 
   function show_fixed(&$driver) {
-    $font_size = $this->get_css_property(CSS_FONT_SIZE);
+    $font_size = $this->getCSSProperty(CSS_FONT_SIZE);
 
     // Check if font-size have been set to 0; in this case we should not draw this box at all
     if ($font_size->getPoints() == 0) { 

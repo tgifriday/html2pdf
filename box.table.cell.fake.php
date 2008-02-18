@@ -7,7 +7,7 @@ class FakeTableCellBox extends TableCellBox {
   function create(&$pipeline) {
     $box =& new FakeTableCellBox;
     
-    $css_state =& $pipeline->get_current_css_state();
+    $css_state =& $pipeline->getCurrentCSSState();
     $css_state->pushDefaultState();
 
     $box->readCSS($css_state);

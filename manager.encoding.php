@@ -235,11 +235,11 @@ class ManagerEncoding {
   }
 
   function getNextUTF8Char($raw_content, &$ptr) {
-    if ((ord($raw_content[$ptr]) & 0xF0) == 0xF0) {
+    if ((ord($raw_content{$ptr}) & 0xF0) == 0xF0) {
       $charlen = 4;
-    } elseif ((ord($raw_content[$ptr]) & 0xE0) == 0xE0) {
+    } elseif ((ord($raw_content{$ptr}) & 0xE0) == 0xE0) {
       $charlen = 3;
-    } elseif ((ord($raw_content[$ptr]) & 0xC0) == 0xC0) {
+    } elseif ((ord($raw_content{$ptr}) & 0xC0) == 0xC0) {
       $charlen = 2;
     } else {
       $charlen = 1;

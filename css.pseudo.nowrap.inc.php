@@ -8,11 +8,11 @@ class CSSPseudoNoWrap extends CSSPropertyHandler {
   function CSSPseudoNoWrap() { $this->CSSPropertyHandler(false, false); }
   function default_value() { return NOWRAP_NORMAL; }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_NOWRAP;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-nowrap';
   }
 }

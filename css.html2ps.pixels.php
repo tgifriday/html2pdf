@@ -15,11 +15,11 @@ class CSSHTML2PSPixels extends CSSPropertyHandler {
     return $value_data;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_PIXELS;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-pixels';
   }
 }

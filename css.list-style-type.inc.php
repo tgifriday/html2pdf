@@ -75,11 +75,11 @@ class CSSListStyleType extends CSSSubFieldProperty {
     }
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_LIST_STYLE_TYPE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'list-style-type';
   }
 }

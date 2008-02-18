@@ -38,7 +38,7 @@ class ValueFont {
   }
 
   function doInherit(&$state) {
-    if ($state->get_propertyDefaultFlag(CSS_FONT_SIZE)) {
+    if ($state->getPropertyDefaultFlag(CSS_FONT_SIZE)) {
       $this->size = Value::fromData(1, UNIT_EM);
     };
 

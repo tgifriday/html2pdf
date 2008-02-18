@@ -80,17 +80,17 @@ class CSSBorder extends CSSPropertyHandler {
       case BORDER_VALUE_COLOR:
         $color_handler = CSS::get_handler(CSS_BORDER_COLOR);
         $border_color = $color_handler->parse($subvalue);
-        $color_handler->set_value($border, $border_color);
+        $color_handler->setValue($border, $border_color);
         break;
       case BORDER_VALUE_WIDTH:
         $width_handler = CSS::get_handler(CSS_BORDER_WIDTH);
         $border_width = $width_handler->parse($subvalue);
-        $width_handler->set_value($border, $border_width);
+        $width_handler->setValue($border, $border_width);
         break;
       case BORDER_VALUE_STYLE:
         $style_handler = CSS::get_handler(CSS_BORDER_STYLE);
         $border_style = $style_handler->parse($subvalue);
-        $style_handler->set_value($border, $border_style);
+        $style_handler->setValue($border, $border_style);
         break;
       };
     };
@@ -98,11 +98,11 @@ class CSSBorder extends CSSPropertyHandler {
     return $border;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border';
   }
 

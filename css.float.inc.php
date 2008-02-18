@@ -18,11 +18,11 @@ class CSSFloat extends CSSPropertyStringSet {
     return FLOAT_NONE; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_FLOAT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'float';
   }
 }

@@ -13,11 +13,11 @@ class CSSPseudoLinkDestination extends CSSPropertyHandler {
     return $value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_LINK_DESTINATION;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-link-destination';
   }
 }

@@ -15,7 +15,7 @@ class CSSBorderWidth extends CSSSubProperty {
                                            Value::fromData(0, UNIT_PT));
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     if ($value != CSS_PROPERTY_INHERIT) {
       $owner_value->top->width    = $value->top;
       $owner_value->right->width  = $value->right;
@@ -29,18 +29,18 @@ class CSSBorderWidth extends CSSSubProperty {
     };
   }
 
-  function get_value(&$owner_value) {
+  function getValue(&$owner_value) {
     return new BorderWidth($owner_value->top->width, 
                            $owner_value->right->width, 
                            $owner_value->bottom->width, 
                            $owner_value->left->width);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER_WIDTH;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border-width';
   }
 
@@ -61,35 +61,43 @@ class CSSBorderWidth extends CSSSubProperty {
     };
   }
 
-  function parse($value) {
-    if ($value == 'inherit') {
-      return CSS_PROPERTY_INHERIT;
-    }
-
+  function parse_in($value) {
     $values = explode(' ', $value);
 
     switch (count($values)) {
     case 1:
       $v1 = $this->parse_value($values[0]);
-      return new BorderWidth($v1, $v1, $v1, $v1);
+      return array($v1, $v1, $v1, $v1);
     case 2:
       $v1 = $this->parse_value($values[0]);
       $v2 = $this->parse_value($values[1]);
-      return new BorderWidth($v1, $v2, $v1, $v2);
+      return array($v1, $v2, $v1, $v2);
     case 3:
       $v1 = $this->parse_value($values[0]);
       $v2 = $this->parse_value($values[1]);
       $v3 = $this->parse_value($values[2]);
-      return new BorderWidth($v1, $v2, $v3, $v2);
+      return array($v1, $v2, $v3, $v2);
     case 4:
       $v1 = $this->parse_value($values[0]);
       $v2 = $this->parse_value($values[1]);
       $v3 = $this->parse_value($values[2]);
       $v4 = $this->parse_value($values[3]);
-      return new BorderWidth($v1, $v2, $v3, $v4);
+      return array($v1, $v2, $v3, $v4);
     default:
       return $this->default_value();
     };   
+  }
+
+  function parse($value) {
+    if ($value == 'inherit') {
+      return CSS_PROPERTY_INHERIT;
+    }
+
+    $values = $this->parse_in($value);
+    return new BorderWidth($values[0], 
+                           $values[1],
+                           $values[2],
+                           $values[3]);
   }
 }
 

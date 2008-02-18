@@ -32,11 +32,11 @@ class CSSHeight extends CSSPropertyHandler {
     return ValueHeight::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HEIGHT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'height';
   }
 }

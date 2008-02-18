@@ -11,11 +11,11 @@ class CSSWidows extends CSSPropertyHandler {
     return (int)$value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_WIDOWS;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'widows';
   }
 }

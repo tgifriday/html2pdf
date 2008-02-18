@@ -19,11 +19,11 @@ class CSSFontStyle extends CSSSubFieldProperty {
     };
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_FONT_STYLE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'font-style';
   }
 

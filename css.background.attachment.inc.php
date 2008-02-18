@@ -4,11 +4,11 @@ define('BACKGROUND_ATTACHMENT_SCROLL', 1);
 define('BACKGROUND_ATTACHMENT_FIXED', 2);
 
 class CSSBackgroundAttachment extends CSSSubFieldProperty {
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BACKGROUND_ATTACHMENT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'background-attachment';
   }
 
