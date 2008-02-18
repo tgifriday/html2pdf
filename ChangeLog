@@ -1,3 +1,75 @@
+2007-12-08 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.1.6
+	
+	* Change: major updates in CSS processing
+
+2007-11-03 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Fixed:  broken PostScript image  encoders (thanks to  snover for
+	solution)
+
+2007-10-28 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.39
+
+	* Change: minor documentation/FAQ update
+
+	* Fixed:  page break  issue in tables  affecting tables  with very
+	small amount of content in last column
+
+	* Fixed: warning message while doing PS output with no font metric
+	files available
+
+2007-10-14 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.38
+	
+	* Fixed: HTML files referring to the same image several times were
+	causing PHP error (introduced in 2.0.37)
+	
+2007-10-07 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.37
+
+	* Fixed: file protocol restriction could work incorrectly under Windows
+
+	* Fixed: upper-case protocol  schemas were handled incorrectly by
+	default FetcherUrl class
+
+	* Change: JPEG images now will not be converted to PNG, decreasing
+	overall PDF size
+
+2007-09-23 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.36
+
+2007-09-20 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Change: minor documentation update
+
+2007-09-18 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Fixed: euro symbol was not displayed in postscript files
+
+2007-09-14 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.35
+
+	* Fixed: media names  are completely case-insensitive now (see CSS
+	2.1 p.7.2)
+
+	* Fixed: inline controls (text and buttons) with empty value caused 
+	PHP errors (introduced in 2.0.33)
+
+	* Fixed: bottom margin / border values were ignored for inline elements
+
+2007-09-06 Konstanin Bournayev <bkon@bkon.ru>
+
+	* Release: html2ps-2.0.34
+
+	* Change: minor samples update
+
 2007-08-25 Konstanin Bournayev <bkon@bkon.ru>
 
 	* Release: html2ps-2.0.33

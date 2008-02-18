@@ -23,7 +23,7 @@ class BoxTextFieldPages extends TextBoxString {
   }
 
   function show(&$viewport) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf("%d", $viewport->expected_pages);
 
@@ -55,7 +55,7 @@ class BoxTextFieldPages extends TextBoxString {
   }
 
   function show_fixed(&$viewport) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf("%d", $viewport->expected_pages);
 

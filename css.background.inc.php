@@ -6,11 +6,11 @@ require_once(HTML2PS_DIR.'value.background.php');
 class CSSBackground extends CSSPropertyHandler {
   var $default_value;
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BACKGROUND;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'background';
   }
 

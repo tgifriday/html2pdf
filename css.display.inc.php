@@ -14,11 +14,11 @@ class CSSDisplay extends CSSPropertyHandler {
 
   function default_value() { return "inline"; }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_DISPLAY;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'display';
   }
 

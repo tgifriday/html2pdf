@@ -21,11 +21,11 @@ class CSSTextTransform extends CSSPropertyStringSet {
     return CSS_TEXT_TRANSFORM_NONE; 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_TEXT_TRANSFORM;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'text-transform';
   }
 }

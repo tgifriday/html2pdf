@@ -12,11 +12,11 @@ class FetcherLocalFile extends Fetcher {
   }
   
   function get_base_url() {
-    return "";
+    return '';
   }
 
   function error_message() {
-    return "";
+    return '';
   }
 }
 ?>

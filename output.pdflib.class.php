@@ -127,7 +127,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   function image($image, $x, $y, $scale) {
     $tmpname = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX);
-    imagepng($image, $tmpname);
+    imagepng($image->get_handle(), $tmpname);
     $pim = pdf_open_image_file($this->pdf, "png", $tmpname, "", 0);
     pdf_place_image($this->pdf, $pim, $x, $y, $scale);
     pdf_close_image($this->pdf, $pim);
@@ -136,7 +136,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   function image_scaled($image, $x, $y, $scale_x, $scale_y) {
     $tmpname = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX);
-    imagepng($image, $tmpname);
+    imagepng($image->get_handle(), $tmpname);
 
     $pim = pdf_open_image_file($this->pdf, "png", $tmpname, "", 0);
 
@@ -152,7 +152,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   function image_ry($image, $x, $y, $height, $bottom, $ox, $oy, $scale) {
     $tmpname = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX);
-    imagepng($image, $tmpname);
+    imagepng($image->get_handle(), $tmpname);
     $pim = pdf_open_image_file($this->pdf, "png", $tmpname, "", 0);
 
     // Fill part to the bottom
@@ -175,7 +175,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   function image_rx($image, $x, $y, $width, $right, $ox, $oy, $scale) {
     $tmpname = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX);
-    imagepng($image, $tmpname);
+    imagepng($image->get_handle(), $tmpname);
     $pim = pdf_open_image_file($this->pdf, "png", $tmpname, "", 0);
 
     // Fill part to the right 
@@ -198,7 +198,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   function image_rx_ry($image, $x, $y, $width, $height, $right, $bottom, $ox, $oy, $scale) {
     $tmpname = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX);
-    imagepng($image, $tmpname);
+    imagepng($image->get_handle(), $tmpname);
     $pim = pdf_open_image_file($this->pdf, "png", $tmpname, "", 0);
 
     // Fill bottom-right quadrant
@@ -307,7 +307,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
       $result = dl(PDFLIB_DL_PATH);
 
       if (!$result) {
-        readfile(HTML2PS_DIR.'/templates/missing_pdflib.html');
+        readfile(HTML2PS_DIR.'templates/missing_pdflib.html');
         error_log("No PDFLIB extension found");
         die("HTML2PS Error");
       }

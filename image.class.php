@@ -14,6 +14,46 @@
 $GLOBALS['g_image_cache'] = array();
 
 class Image {
+  var $_handle;
+  var $_filename;
+  var $_type;
+
+  function Image($handle, $filename, $type) {
+    $this->_handle = $handle;
+    $this->_filename = $filename;
+    $this->_type = $type;
+  }
+
+  function get_filename() {
+    return $this->_filename;
+  }
+
+  function get_handle() {
+    return $this->_handle;
+  }
+
+  function get_type() {
+    return $this->_type;
+  }
+
+  function sx() {
+    if (!$this->_handle) {
+      return 0;
+    };
+
+    return imagesx($this->_handle);
+  }
+
+  function sy() {
+    if (!$this->_handle) {
+      return 0;
+    };
+
+    return imagesy($this->_handle);
+  }
+}
+
+class ImageFactory {
   // Static funcion; checks if given URL is already cached and either returns 
   // cached object or downloads the requested image
   //
@@ -27,7 +67,7 @@ class Image {
     //
     if (isset($g_image_cache[$url])) {
       //      return do_image_open($g_image_cache[$url]);
-      return $g_image_cache[$url]['handle'];
+      return $g_image_cache[$url];
     };
 
     // Download image; we should do it before we call do_image_open,
@@ -35,7 +75,7 @@ class Image {
     // and second to actually create the image - PHP url wrappers do no caching 
     // at all
     //
-    $filename = Image::make_cache_filename($url);
+    $filename = ImageFactory::make_cache_filename($url);
 
     // REQUIRES: PHP 4.3.0+
     // we suppress warning messages, as missing image files will cause 'copy' to print 
@@ -58,13 +98,18 @@ class Image {
     
     // register it in the cached objects array
     //
-    $g_image_cache[$url] = array('filename' => $filename,
-                                 'handle' => do_image_open($filename));
-    
+    $handle = do_image_open($filename, $type);
+    if ($handle) {
+      $g_image_cache[$url] =& new Image($handle,
+                                        $filename,
+                                        $type);
+    } else {
+      $g_image_cache[$url] = null;
+    };
     // return image
     //
     // return do_image_open($filename);
-    return $g_image_cache[$url]['handle'];
+    return $g_image_cache[$url];
   }
 
   // Makes the filename to contain the cached version of URL
@@ -121,7 +166,9 @@ class Image {
   //
   function clear_cache() {
     foreach ($GLOBALS['g_image_cache'] as $key => $value) {
-      unlink($value['filename']);
+      if (!is_null($value)) {
+        unlink($value->get_filename());
+      };
     };
     $g_image_cache = array();
   }

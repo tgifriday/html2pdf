@@ -17,7 +17,7 @@ class TextAreaInputBox extends InlineBlockBox {
     $name  = $root->get_attribute('name');
 
     $box = new TextAreaInputBox($value, $name);
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     $box->create_content($root, $pipeline);
 
     return $box;

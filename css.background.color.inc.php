@@ -4,11 +4,11 @@
 // 'background-color' and color part of 'background' CSS properies handler
 
 class CSSBackgroundColor extends CSSSubFieldProperty {
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BACKGROUND_COLOR;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'background-color';
   }
 
@@ -26,7 +26,7 @@ class CSSBackgroundColor extends CSSSubFieldProperty {
     // 
     // As whitespace could be preceeded by another whitespace, we should prevent breaking 
     // value in the middle of long whitespace too
-    $terms = preg_split("/(?<![,(\s])\s+/ ",$value);
+    $terms = preg_split('/(?<![,(\s])\s+(?![,)\s])/ ',$value);
 
     // Note that color declaration always will contain only one word; 
     // thus, we can split out value into words and try to parse each one as color

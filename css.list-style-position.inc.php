@@ -20,11 +20,11 @@ class CSSListStylePosition extends CSSSubFieldProperty {
     return null;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_LIST_STYLE_POSITION;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'list-style-position';
   }
 }

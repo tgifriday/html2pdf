@@ -7,7 +7,7 @@
 
 // Directory containing HTML2PS script files (with traling slash)
 if (!defined('HTML2PS_DIR')) {
-  define('HTML2PS_DIR', dirname(__FILE__).'/');
+  define('HTML2PS_DIR', dirname(__FILE__).DIRECTORY_SEPARATOR);
 };
 
 // User-Agent HTTP header to send when requesting a file
@@ -24,11 +24,11 @@ define('DEFAULT_ENCODING', 'iso-8859-1');
  */
 
 // Path to Ghostscript executable
-define('GS_PATH','c:\gs\gs8.51\bin\gswin32c.exe');
+define('GS_PATH','c:\Program Files\gs\gs8.54\bin\gswin32c.exe');
 
 // Path to font metric files (AFM files). 
 // NOTE: Trailing backslash required
-define('TYPE1_FONTS_REPOSITORY',"c:\\gs\\fonts\\");
+define('TYPE1_FONTS_REPOSITORY', "c:\\Program Files\\gs\\fonts\\");
 // define('TYPE1_FONTS_REPOSITORY',"/usr/share/ghostscript/fonts/");
 
 /**
@@ -133,12 +133,12 @@ define('FOOTNOTE_MARKER_MARGIN', 1); // Content points
 define('FOOTNOTE_GAP', 2); // Space between footnotes
 
 if (!defined('DEBUG_MODE')) {
-  //  define('DEBUG_MODE',1);
+  // define('DEBUG_MODE',1);
 };
 
 define('HTML2PS_VERSION_MAJOR', 2);
-define('HTML2PS_VERSION_MINOR', 0);
-define('HTML2PS_SUBVERSON', 33);
+define('HTML2PS_VERSION_MINOR', 1);
+define('HTML2PS_SUBVERSON', 12);
 
 define('MAX_UNPENALIZED_FREE_FRACTION', 0.25);
 define('MAX_FREE_FRACTION',             0.5);

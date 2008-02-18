@@ -51,7 +51,7 @@ class GenericBox {
   }
 
   /**
-   * see getProperty for optimization description
+   * see get_property for optimization description
    */
   function setCSSProperty($code, $value) {
     static $cache = array();
@@ -67,7 +67,7 @@ class GenericBox {
    * so even a slight overhead for CSS::get_handler call
    * accumulates in a significiant processing delay.
    */
-  function &getCSSProperty($code) {
+  function &get_css_property($code) {
     static $cache = array();
     if (!isset($cache[$code])) {
       $cache[$code] =& CSS::get_handler($code);
@@ -105,12 +105,12 @@ class GenericBox {
    */
   function _readCSSLengths($state, $property_list) {
     if (is_null($this->_cached_base_font_size)) {
-      $font =& $this->getCSSProperty(CSS_FONT);
+      $font =& $this->get_css_property(CSS_FONT);
       $this->_cached_base_font_size = $font->size->getPoints();
     };
 
     foreach ($property_list as $property) {
-      $value =& $state->getProperty($property);
+      $value =& $state->get_property($property);
 
       if ($value === CSS_PROPERTY_INHERIT) {
         $value =& $state->getInheritedProperty($property);
@@ -128,7 +128,7 @@ class GenericBox {
 
   function _readCSS($state, $property_list) {
     foreach ($property_list as $property) {
-      $value = $state->getProperty($property);
+      $value = $state->get_property($property);
 
       // Note that order is important; composite object-value could be inherited and
       // object itself could contain subvalues with 'inherit' value
@@ -150,7 +150,7 @@ class GenericBox {
     /**
      * Determine font size to be used in this box (required for em/ex units)
      */
-    $value = $state->getProperty(CSS_FONT);
+    $value = $state->get_property(CSS_FONT);
     if ($value === CSS_PROPERTY_INHERIT) {
       $value = $state->getInheritedProperty(CSS_FONT);
     };
@@ -184,7 +184,7 @@ class GenericBox {
     };
 
     // Save ID attribute value
-    $id = $state->getProperty(CSS_HTML2PS_LINK_DESTINATION);
+    $id = $state->get_property(CSS_HTML2PS_LINK_DESTINATION);
     if (!is_null($id)) {
       $this->set_id($id);
     };
@@ -216,7 +216,7 @@ class GenericBox {
     // Set current text color
     // Note that text color is used not only for text drawing (for example, list item markers 
     // are drawn with text color)
-    $color = $this->getCSSProperty(CSS_COLOR);
+    $color = $this->get_css_property(CSS_COLOR);
     $color->apply($driver);
   }
 
@@ -316,7 +316,7 @@ class GenericBox {
       return; 
     };
 
-    $link_destination = $this->getCSSProperty(CSS_HTML2PS_LINK_DESTINATION);
+    $link_destination = $this->get_css_property(CSS_HTML2PS_LINK_DESTINATION);
     if (!is_null($link_destination)) {
       $anchors[$link_destination] =& $this->make_anchor($driver->media, $link_destination, $page_heights);
     };
@@ -401,7 +401,7 @@ class GenericBox {
     };
 
     return 
-      $this->parent->getCSSProperty(CSS_POSITION) == POSITION_ABSOLUTE ||
+      $this->parent->get_css_property(CSS_POSITION) == POSITION_ABSOLUTE ||
       $this->parent->hasAbsolutePositionedParent();
   }
 
@@ -411,7 +411,7 @@ class GenericBox {
     };
 
     return 
-      $this->parent->getCSSProperty(CSS_POSITION) == POSITION_FIXED ||
+      $this->parent->get_css_property(CSS_POSITION) == POSITION_FIXED ||
       $this->parent->hasFixedPositionedParent();
   }
 
@@ -420,15 +420,15 @@ class GenericBox {
    * all it parents has no width constraints
    */
   function mayBeExpanded() {
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     if (!$wc->isNull()) { return false; };
 
-    if ($this->getCSSProperty(CSS_FLOAT) <> FLOAT_NONE) {
+    if ($this->get_css_property(CSS_FLOAT) <> FLOAT_NONE) {
       return true;
     };
 
-    if ($this->getCSSProperty(CSS_POSITION) <> POSITION_STATIC &&
-        $this->getCSSProperty(CSS_POSITION) <> POSITION_RELATIVE) {
+    if ($this->get_css_property(CSS_POSITION) <> POSITION_STATIC &&
+        $this->get_css_property(CSS_POSITION) <> POSITION_RELATIVE) {
       return true;
     };
         

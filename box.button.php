@@ -19,18 +19,13 @@
  * @link http://www.w3.org/TR/html4/interact/forms.html#h-17.4 HTML 4.01 The INPUT element
  */
 class ButtonBox extends InlineControlBox {
+  function ButtonBox() {
+    $this->InlineControlBox();
+  }
+
   function get_max_width(&$context, $limit = 10E6) { 
     return 
       GenericContainerBox::get_max_width($context, $limit);
-  }
-
-  /**
-   * Create a new button element
-   *
-   * @param string $text text to be rendered on the button
-   */
-  function ButtonBox() {
-    $this->InlineControlBox();
   }
 
   /**
@@ -61,7 +56,7 @@ class ButtonBox extends InlineControlBox {
     };
 
     $box =& new ButtonBox();
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
 
     /**
      * If button width is not constrained, then we'll add some space around the button text
@@ -74,20 +69,7 @@ class ButtonBox extends InlineControlBox {
   }
 
   function _setup($text, &$pipeline) {
-    /**
-     * Contents of the text box are somewhat similar to the inline box: 
-     * a sequence of the text and whitespace boxes; we generate this sequence using
-     * the InlineBox, then copy contents of the created inline box to our button.
-     *
-     * @todo probably, create_from_text() function should be extracted to the common parent 
-     * of inline boxes.
-     */
-    $ibox = InlineBox::create_from_text($text, WHITESPACE_PRE, $pipeline);
-
-    $size = count($ibox->content);
-    for ($i=0; $i<$size; $i++) {
-      $this->add_child($ibox->content[$i]);
-    };
+    $this->setup_content($text, $pipeline);
 
     /**
      * Button height includes vertical padding (e.g. the following two buttons 

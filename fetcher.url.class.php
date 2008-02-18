@@ -227,11 +227,11 @@ class FetcherUrl extends Fetcher {
     if ($parts == false) {
       error_log(sprintf("The URL '%s' could not be parsed", $this->url));
 
-      $this->content = "";
+      $this->content = '';
       $this->code = HTTP_OK;
       return true;
     };
-    
+   
     /**
      * Setup default values
      */
@@ -250,8 +250,8 @@ class FetcherUrl extends Fetcher {
     if (isset($parts['port']))     { $this->port      = $parts['port'];      };
     if (isset($parts['path']))     { $this->path      = $parts['path'];      } else { $this->path = "/"; };
     if (isset($parts['query']))    { $this->path     .= '?'.$parts['query']; };
-
-    switch ($this->protocol) {
+  
+    switch (strtolower($this->protocol)) {
     case 'http':
       return $this->fetch_http();
     case 'https':
@@ -301,8 +301,8 @@ class FetcherUrl extends Fetcher {
     };
 
     $normalized_path = realpath(urldecode($path));
-
-    if (substr($normalized_path, 0, strlen(FILE_PROTOCOL_RESTRICT)) !== FILE_PROTOCOL_RESTRICT) {
+    $normalized_path_part = substr($normalized_path, 0, strlen(FILE_PROTOCOL_RESTRICT));
+    if ($normalized_path_part !== FILE_PROTOCOL_RESTRICT) {
       error_log(sprintf("Access denied to file '%s'", $normalized_path));
 
       $this->content = "";

@@ -17,11 +17,11 @@ class CSSTop extends CSSPropertyHandler {
     return $this->_getAutoValue();
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_TOP;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'top';
   }
 

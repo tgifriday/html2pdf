@@ -13,8 +13,8 @@ class GenericFormattedBox extends GenericBox {
 
     $current_box = $this;
 
-    $border  = $current_box->getCSSProperty(CSS_BORDER);
-    $padding = $current_box->getCSSProperty(CSS_PADDING);
+    $border  = $current_box->get_css_property(CSS_BORDER);
+    $padding = $current_box->get_css_property(CSS_PADDING);
     if ($border->top->get_width() > 0 ||
         $padding->top->value > 0) {
       return 0;
@@ -22,9 +22,9 @@ class GenericFormattedBox extends GenericBox {
 
     while (!is_null($current_box) && 
            $current_box->isBlockLevel()) {
-      $margin  = $current_box->getCSSProperty(CSS_MARGIN);
-      $border  = $current_box->getCSSProperty(CSS_BORDER);
-      $padding = $current_box->getCSSProperty(CSS_PADDING);
+      $margin  = $current_box->get_css_property(CSS_MARGIN);
+      $border  = $current_box->get_css_property(CSS_BORDER);
+      $padding = $current_box->get_css_property(CSS_PADDING);
 
       $top_margin = $margin->top->value;
 
@@ -52,9 +52,9 @@ class GenericFormattedBox extends GenericBox {
     $current_box = $this;
     while (!is_null($current_box) && 
            $current_box->isBlockLevel()) {
-      $margin  = $current_box->getCSSProperty(CSS_MARGIN);
-      $border  = $current_box->getCSSProperty(CSS_BORDER);
-      $padding = $current_box->getCSSProperty(CSS_PADDING);
+      $margin  = $current_box->get_css_property(CSS_MARGIN);
+      $border  = $current_box->get_css_property(CSS_BORDER);
+      $padding = $current_box->get_css_property(CSS_PADDING);
 
       $top_margin = $margin->top->value;
 
@@ -82,9 +82,9 @@ class GenericFormattedBox extends GenericBox {
     $current_box = $this;
     while (!is_null($current_box) && 
            $current_box->isBlockLevel()) {
-      $margin  = $current_box->getCSSProperty(CSS_MARGIN);
-      $border  = $current_box->getCSSProperty(CSS_BORDER);
-      $padding = $current_box->getCSSProperty(CSS_PADDING);
+      $margin  = $current_box->get_css_property(CSS_MARGIN);
+      $border  = $current_box->get_css_property(CSS_BORDER);
+      $padding = $current_box->get_css_property(CSS_PADDING);
 
       $bottom_margin = $margin->bottom->value;
 
@@ -116,8 +116,8 @@ class GenericFormattedBox extends GenericBox {
      *
      * @link http://www.w3.org/TR/CSS21/visudet.html#Computing_widths_and_margins CSS 2.1 8.3.1 Calculating widths and margins
      */
-    $parent_border  = $parent->getCSSProperty(CSS_BORDER);
-    $parent_padding = $parent->getCSSProperty(CSS_PADDING);
+    $parent_border  = $parent->get_css_property(CSS_BORDER);
+    $parent_padding = $parent->get_css_property(CSS_PADDING);
 
     /**
      * The  bottom margin  of an  in-flow block-level  element  with a
@@ -128,7 +128,7 @@ class GenericFormattedBox extends GenericBox {
      */
 
     $last =& $parent->get_last();
-    $is_last = $this->uid == $last->uid;
+    $is_last = !is_null($last) && $this->uid == $last->uid;
 
     if (!is_null($last) && 
         $is_last &&                                  // This element is a last in-flow block level element AND
@@ -277,8 +277,8 @@ class GenericFormattedBox extends GenericBox {
      * property,  user agents  must  use the  value  of the  element's
      * 'color' property as the computed value for the border color.
      */
-    $border =& $this->getCSSProperty(CSS_BORDER);
-    $color  =& $this->getCSSProperty(CSS_COLOR);
+    $border =& $this->get_css_property(CSS_BORDER);
+    $color  =& $this->get_css_property(CSS_COLOR);
 
     if ($border->top->isDefaultColor()) {
       $border->top->setColor($color);
@@ -302,22 +302,22 @@ class GenericFormattedBox extends GenericBox {
     $this->height = 0;
 
     // 'width'
-    $wc =& $this->getCSSProperty(CSS_WIDTH);
+    $wc =& $this->get_css_property(CSS_WIDTH);
     $this->width = $wc->apply(0,0);
 
     // 'PSEUDO-CSS' properties
 
     // '-localalign'
-    switch ($state->getProperty(CSS_HTML2PS_LOCALALIGN)) {
+    switch ($state->get_property(CSS_HTML2PS_LOCALALIGN)) {
     case LA_LEFT:
       break;
     case LA_RIGHT:
-      $margin =& $this->getCSSProperty(CSS_MARGIN);
+      $margin =& $this->get_css_property(CSS_MARGIN);
       $margin->left->auto = true;
       $this->setCSSProperty(CSS_MARGIN, $margin);
       break;
     case LA_CENTER:
-      $margin =& $this->getCSSProperty(CSS_MARGIN);
+      $margin =& $this->get_css_property(CSS_MARGIN);
       $margin->left->auto  = true;
       $margin->right->auto = true;
       $this->setCSSProperty(CSS_MARGIN, $margin);
@@ -326,14 +326,14 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function _calc_percentage_margins(&$parent) {
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     $containing_block =& $this->_get_containing_block();
     $margin->calcPercentages($containing_block['right'] - $containing_block['left']);
     $this->setCSSProperty(CSS_MARGIN, $margin);
   }
 
   function _calc_percentage_padding(&$parent) {
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     $containing_block =& $this->_get_containing_block();
     $padding->calcPercentages($containing_block['right'] - $containing_block['left']);
     $this->setCSSProperty(CSS_PADDING, $padding);
@@ -354,7 +354,7 @@ class GenericFormattedBox extends GenericBox {
    * then the resulting layout is undefined in CSS 2.1. 
    */
   function _calc_percentage_width(&$parent, &$context) {
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     if ($wc->isFraction()) { 
       $containing_block =& $this->_get_containing_block();
 
@@ -370,7 +370,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function _calc_auto_width_margins(&$parent) {
-    $float = $this->getCSSProperty(CSS_FLOAT);
+    $float = $this->get_css_property(CSS_FLOAT);
 
     if ($float !== FLOAT_NONE) {
       $this->_calc_auto_width_margins_float($parent);
@@ -402,7 +402,7 @@ class GenericFormattedBox extends GenericBox {
     };
   
     // If 'margin-left', or 'margin-right' are computed as 'auto', their used value is '0'.
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     if ($margin->left->auto) { $margin->left->value = 0; }
     if ($margin->right->auto) { $margin->right->value = 0; }
     $this->setCSSProperty(CSS_MARGIN, $margin);
@@ -421,7 +421,7 @@ class GenericFormattedBox extends GenericBox {
     // If both 'margin-left' and 'margin-right' are 'auto', their used values are equal. 
     // This horizontally centers the element with respect to the edges of the containing block.
     
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     if ($margin->left->auto && $margin->right->auto) {
       $margin_value = ($parent_width - $this->get_full_width()) / 2;
       $margin->left->value = $margin_value;
@@ -466,7 +466,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_preferred_width(&$context) {
-    return $this->get_max_width($context);
+    return $this->get_max_width($context) - $this->_get_hor_extra();
   }
 
   function get_preferred_minimum_width(&$context) {
@@ -492,7 +492,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function &_get_containing_block() {
-    $position = $this->getCSSProperty(CSS_POSITION);
+    $position = $this->get_css_property(CSS_POSITION);
 
     switch ($position) {
     case POSITION_ABSOLUTE:
@@ -553,7 +553,7 @@ class GenericFormattedBox extends GenericBox {
     // - Otherwise, the containing block is formed by the padding edge of the ancestor.
     // TODO: inline-level ancestors
     while ((!is_null($parent->parent)) && 
-           ($parent->getCSSProperty(CSS_POSITION) === POSITION_STATIC)) { 
+           ($parent->get_css_property(CSS_POSITION) === POSITION_STATIC)) { 
       $parent =& $parent->parent; 
     }
 
@@ -631,7 +631,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_extra_bottom() {
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
     return 
       $this->get_margin_bottom() + 
       $border->bottom->get_width() + 
@@ -639,7 +639,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_extra_left() {
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
 
     $left_border = $border->left;
 
@@ -650,7 +650,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_extra_right() {
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
     $right_border = $border->right;
     return 
       $this->get_margin_right() + 
@@ -659,7 +659,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_extra_top() {
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
     return 
       $this->get_margin_top() + 
       $border->top->get_width() + 
@@ -670,37 +670,37 @@ class GenericFormattedBox extends GenericBox {
   function get_extra_line_right() { return 0; }
 
   function get_margin_bottom() { 
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     return $margin->bottom->value; 
   }
 
   function get_margin_left() { 
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     return $margin->left->value; 
   }
   
   function get_margin_right() { 
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     return $margin->right->value; 
   }
 
   function get_margin_top() { 
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
     return $margin->top->value; 
   }
 
   function get_padding_right() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $padding->right->value; 
   }
 
   function get_padding_left() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $padding->left->value; 
   }
 
   function get_padding_top() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $padding->top->value; 
   }
 
@@ -709,13 +709,13 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_padding_bottom() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $padding->bottom->value; 
   }
 
   function get_left_border() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
-    $border  = $this->getCSSProperty(CSS_BORDER);
+    $padding = $this->get_css_property(CSS_PADDING);
+    $border  = $this->get_css_property(CSS_BORDER);
 
     return 
       $this->get_left() - 
@@ -724,8 +724,8 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_right_border() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
-    $border  = $this->getCSSProperty(CSS_BORDER);
+    $padding = $this->get_css_property(CSS_PADDING);
+    $border  = $this->get_css_property(CSS_BORDER);
 
     return 
       $this->get_left() + 
@@ -735,7 +735,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_top_border()     { 
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
 
     return 
       $this->get_top_padding() + 
@@ -743,24 +743,24 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_bottom_border()  { 
-    $border = $this->getCSSProperty(CSS_BORDER);
+    $border = $this->get_css_property(CSS_BORDER);
     return 
       $this->get_bottom_padding()  - 
       $border->bottom->get_width();  
   }
 
   function get_left_padding() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $this->get_left() - $padding->left->value; 
   }
 
   function get_right_padding() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $this->get_left() + $this->get_width() + $padding->right->value; 
   }
 
   function get_top_padding()    { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
 
     return 
       $this->get_top() + 
@@ -768,7 +768,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_bottom_padding() { 
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $padding = $this->get_css_property(CSS_PADDING);
     return $this->get_bottom() - $padding->bottom->value;
   }
 
@@ -791,7 +791,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_top_margin() { 
-    $margin = $this->getCSSProperty(CSS_MARGIN);
+    $margin = $this->get_css_property(CSS_MARGIN);
 
     return 
       $this->get_top_border() + 
@@ -811,7 +811,7 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function get_width() {
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
 
     if ($this->parent) {
       return $wc->apply($this->width, $this->parent->width);
@@ -827,7 +827,7 @@ class GenericFormattedBox extends GenericBox {
   // as parent can be expanded too. 
   //
   function get_expandable_width() {
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     if ($wc->isNull() && $this->parent) {
       return $this->parent->get_expandable_width();
     } else {
@@ -877,8 +877,8 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function out_of_flow() {
-    $position = $this->getCSSProperty(CSS_POSITION);
-    $display  = $this->getCSSProperty(CSS_DISPLAY);
+    $position = $this->get_css_property(CSS_POSITION);
+    $display  = $this->get_css_property(CSS_DISPLAY);
 
     return 
       $position == POSITION_ABSOLUTE ||
@@ -889,8 +889,8 @@ class GenericFormattedBox extends GenericBox {
   function moveto($x, $y) { $this->offset($x - $this->get_left(), $y - $this->get_top()); }
 
   function show(&$viewport) {
-    $border     = $this->getCSSProperty(CSS_BORDER);
-    $background = $this->getCSSProperty(CSS_BACKGROUND);
+    $border     = $this->get_css_property(CSS_BORDER);
+    $background = $this->get_css_property(CSS_BACKGROUND);
 
     // Draw border of the box
     $border->show($viewport, $this);
@@ -912,8 +912,8 @@ class GenericFormattedBox extends GenericBox {
   }
 
   function line_break_allowed() { 
-    $white_space = $this->getCSSProperty(CSS_WHITE_SPACE);
-    $nowrap      = $this->getCSSProperty(CSS_HTML2PS_NOWRAP);
+    $white_space = $this->get_css_property(CSS_WHITE_SPACE);
+    $nowrap      = $this->get_css_property(CSS_HTML2PS_NOWRAP);
 
     return 
       ($white_space === WHITESPACE_NORMAL || 
@@ -928,8 +928,8 @@ class GenericFormattedBox extends GenericBox {
   function get_bottom_background() { return $this->get_bottom_padding(); }
 
   function isVisibleInFlow() { 
-    $visibility = $this->getCSSProperty(CSS_VISIBILITY);
-    $position   = $this->getCSSProperty(CSS_POSITION);
+    $visibility = $this->get_css_property(CSS_VISIBILITY);
+    $position   = $this->get_css_property(CSS_POSITION);
 
     return 
       $visibility === VISIBILITY_VISIBLE &&
@@ -960,7 +960,7 @@ class GenericFormattedBox extends GenericBox {
     /**
      * Check if 'top' value is percentage
      */
-    $top = $this->getCSSProperty(CSS_TOP);
+    $top = $this->get_css_property(CSS_TOP);
     if ($top->isNormal()) {
       $top_value = $top->getPoints();
     } elseif ($top->isPercentage()) {
@@ -974,7 +974,7 @@ class GenericFormattedBox extends GenericBox {
     /**
      * Check if 'bottom' value is percentage
      */
-    $bottom = $this->getCSSProperty(CSS_BOTTOM);
+    $bottom = $this->get_css_property(CSS_BOTTOM);
     if ($bottom->isNormal()) {
       $bottom_value = $bottom->getPoints();
     } elseif ($bottom->isPercentage()) {
@@ -999,7 +999,7 @@ class GenericFormattedBox extends GenericBox {
     /**
      * Check if 'left' value is percentage
      */
-    $left = $this->getCSSProperty(CSS_LEFT);
+    $left = $this->get_css_property(CSS_LEFT);
     if ($left->isNormal()) {
       $left_value = $left->getPoints();
     } elseif ($left->isPercentage()) {
@@ -1013,7 +1013,7 @@ class GenericFormattedBox extends GenericBox {
     /**
      * Check if 'right' value is percentage
      */
-    $right = $this->getCSSProperty(CSS_RIGHT);
+    $right = $this->get_css_property(CSS_RIGHT);
     if ($right->isNormal()) {
       $right_value = $right->getPoints();
     } elseif ($right->isPercentage()) {

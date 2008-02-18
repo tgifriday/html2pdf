@@ -90,7 +90,7 @@ class ButtonImageBox extends ImgBox {
     $url_autofix = new AutofixUrl();
     $src = $url_autofix->apply(trim($root->get_attribute("src")));
 
-    $src_img = Image::get($pipeline->guess_url($src), $pipeline);
+    $src_img = ImageFactory::get($pipeline->guess_url($src), $pipeline);
     if (is_null($src_img)) {
       error_log(sprintf("Cannot open image at '%s'", $src));
 
@@ -108,16 +108,16 @@ class ButtonImageBox extends ImgBox {
 
       $alt = $root->get_attribute('alt');
       
-      $css_state =& $pipeline->getCurrentCSSState();
+      $css_state =& $pipeline->get_current_css_state();
       $box =& new ButtonBrokenImagebox($width, $height, $alt, $name, $value, 
-                                       $css_state->getProperty(CSS_HTML2PS_FORM_ACTION));
+                                       $css_state->get_property(CSS_HTML2PS_FORM_ACTION));
       $box->readCSS($css_state);
       return $box;
     };
 
-    $css_state =& $pipeline->getCurrentCSSState();
+    $css_state =& $pipeline->get_current_css_state();
     $box =& new ButtonImageBox($src_img, $name, $value, 
-                               $css_state->getProperty(CSS_HTML2PS_FORM_ACTION));
+                               $css_state->get_property(CSS_HTML2PS_FORM_ACTION));
     $box->readCSS($css_state);
     $box->_setupSize();
     

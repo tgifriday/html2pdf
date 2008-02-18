@@ -3,8 +3,8 @@
 require_once(HTML2PS_DIR.'utils_units.php');
 
 function cmp_footnote_locations($a, $b) {
-  if ($a->getLocation() == $b->getLocation()) { return 0; };
-  return ($a->getLocation() > $b->getLocation()) ? -1 : 1; 
+  if ($a->get_location() == $b->get_location()) { return 0; };
+  return ($a->get_location() > $b->get_location()) ? -1 : 1; 
 }
 
 class FootnoteLocation {
@@ -16,11 +16,11 @@ class FootnoteLocation {
     $this->_content_height = $content_height;
   }
 
-  function getLocation() {
+  function get_location() {
     return $this->_location;
   }
 
-  function getContentHeight() {
+  function get_content_height() {
     return $this->_content_height;
   }
 }
@@ -39,19 +39,19 @@ class PageBreakLocation {
     $this->penalty  = $penalty;
   }
 
-  function _getFootnotesHeight($footnotes, $page_start, $location) {
+  function get_footnotes_height($footnotes, $page_start, $location) {
     $i = 0;
     $size = count($footnotes);
 
     $height = 0;
 
-    while ($i < $size && $footnotes[$i]->getLocation() > $page_start) { 
+    while ($i < $size && $footnotes[$i]->get_location() > $page_start) { 
       $i++; 
     };
 
     $footnotes_count = 0;
-    while ($i < $size && $footnotes[$i]->getLocation() > $location) { 
-      $height += $footnotes[$i]->getContentHeight();
+    while ($i < $size && $footnotes[$i]->get_location() > $location) { 
+      $height += $footnotes[$i]->get_content_height();
       $footnotes_count ++;
       $i++;
     };
@@ -67,9 +67,11 @@ class PageBreakLocation {
     };
   }
 
-  function getPenalty($page_start, $max_page_height, $footnotes) {
-    $height_penalty = $this->_getPageBreakHeightPenalty($page_start, 
-                                                        $max_page_height - $this->_getFootnotesHeight($footnotes, $page_start, $this->location));
+  function get_penalty($page_start, $max_page_height, $footnotes) {
+    $height_penalty = $this->get_page_break_height_penalty($page_start, 
+                                                           $max_page_height - $this->get_footnotes_height($footnotes, 
+                                                                                                          $page_start, 
+                                                                                                          $this->location));
 
     return $this->penalty + $height_penalty;
   }
@@ -79,7 +81,7 @@ class PageBreakLocation {
    * the  page  bottom.  This  function  calculates  a  'penalty'  for
    * breaking page at its current height.
    */
-  function _getPageBreakHeightPenalty($page_start, $max_page_height) {
+  function get_page_break_height_penalty($page_start, $max_page_height) {
     $current_height = $page_start - $this->location;
 
     if ($current_height > $max_page_height) {
@@ -127,8 +129,8 @@ class PageBreakLocation {
  * 2. Between line boxes inside a block box. 
  */
 class PageBreakLocator {
-  function _getBreakLocations(&$dom_tree) {
-    $locations_ungrouped = PageBreakLocator::_getPagesTraverse($dom_tree, 0);
+  function get_break_locations(&$dom_tree) {
+    $locations_ungrouped = PageBreakLocator::get_pages_traverse($dom_tree, 0);
 
     /**
      * If there's no page break locations (e.g. document is empty)
@@ -141,31 +143,31 @@ class PageBreakLocator {
     return PageBreakLocator::sort_locations($locations_ungrouped);
   }
 
-  function _getFootnotesTraverse(&$box) {
+  function get_footnotes_traverse(&$box) {
     $footnotes = array();
 
     if (is_a($box, 'BoxNoteCall')) {
       $footnotes[] = new FootnoteLocation($box->get_top_margin(), $box->_note_content->get_full_height());
     } elseif (is_a($box, 'GenericContainerBox')) {
       foreach ($box->content as $child) {
-        $footnotes = array_merge($footnotes, PageBreakLocator::_getFootnotesTraverse($child));
+        $footnotes = array_merge($footnotes, PageBreakLocator::get_footnotes_traverse($child));
       };
     };
 
     return $footnotes;
   }
 
-  function getPages(&$dom_tree, $max_page_height, $first_page_top) {
+  function get_pages(&$dom_tree, $max_page_height, $first_page_top) {
     $current_page_top = $first_page_top;
     $heights = array();
 
     /**
      * Get list of footnotes and heights of footnote content blocks
      */
-    $footnotes = PageBreakLocator::_getFootnotesTraverse($dom_tree);
+    $footnotes = PageBreakLocator::get_footnotes_traverse($dom_tree);
     usort($footnotes, 'cmp_footnote_locations');
 
-    $locations = PageBreakLocator::_getBreakLocations($dom_tree);
+    $locations = PageBreakLocator::get_break_locations($dom_tree);
 
     if (count($locations) == 0) {
       return array($max_page_height);
@@ -179,14 +181,16 @@ class PageBreakLocator {
         };
 
         $current_pos = round_units($current_page_top - $location->location);
-        $available_page_height = round_units($max_page_height - $location->_getFootnotesHeight($footnotes, $current_page_top, $location->location));
+        $available_page_height = round_units($max_page_height - $location->get_footnotes_height($footnotes, $current_page_top, $location->location));
 
         if ($current_pos > $available_page_height) {
           /**
            * No more locations found on current page
            */
 
-          if ($best_location->getPenalty($current_page_top, $max_page_height, $footnotes) >= MAX_PAGE_BREAK_PENALTY) {
+          $best_location_penalty = $best_location->get_penalty($current_page_top, $max_page_height, $footnotes);
+          if ($best_location_penalty >= MAX_PAGE_BREAK_PENALTY) {
+            error_log('Could not find good page break location');
             $heights[] = $max_page_height;
             $current_page_top -= $max_page_height;
             $best_location = null;
@@ -197,8 +201,8 @@ class PageBreakLocator {
           };
 
         } else {
-          $location_penalty = $location->getPenalty($current_page_top, $max_page_height, $footnotes);
-          $best_penalty = $best_location->getPenalty($current_page_top, $max_page_height, $footnotes);
+          $location_penalty = $location->get_penalty($current_page_top, $max_page_height, $footnotes);
+          $best_penalty = $best_location->get_penalty($current_page_top, $max_page_height, $footnotes);
 
           if ($location_penalty <= $best_penalty) {
             /**
@@ -222,27 +226,27 @@ class PageBreakLocator {
     return $heights;
   }
 
-  function _isForcedPageBreak($value) {
+  function is_forced_page_break($value) {
     return
       $value == PAGE_BREAK_ALWAYS ||
       $value == PAGE_BREAK_LEFT ||
       $value == PAGE_BREAK_RIGHT;
   }
 
-  function _hasForcedPageBreakBefore(&$box) {
-    return PageBreakLocator::_isForcedPageBreak($box->getCSSProperty(CSS_PAGE_BREAK_BEFORE));
+  function has_forced_page_break_before(&$box) {
+    return PageBreakLocator::is_forced_page_break($box->get_css_property(CSS_PAGE_BREAK_BEFORE));
   }
 
-  function _hasForcedPageBreakAfter(&$box) {
-    return PageBreakLocator::_isForcedPageBreak($box->getCSSProperty(CSS_PAGE_BREAK_AFTER));
+  function has_forced_page_break_after(&$box) {
+    return PageBreakLocator::is_forced_page_break($box->get_css_property(CSS_PAGE_BREAK_AFTER));
   }
 
-  function _getPagesTraverseBlock(&$box, &$next, &$previous, $penalty) {
+  function get_pages_traverse_block(&$box, &$next, &$previous, $penalty) {
     $locations = array();
 
     // Absolute/fixed positioned blocks do not cause page breaks
     // (CSS 2.1. 13.2.3 Content outside the page box)
-    $position = $box->getCSSProperty(CSS_POSITION);
+    $position = $box->get_css_property(CSS_POSITION);
     if ($position == POSITION_FIXED || $position == POSITION_ABSOLUTE) {
       return $locations;
     };
@@ -255,39 +259,41 @@ class PageBreakLocator {
     /**
      * Check for breaks in block box vertical margin
      */
-
+   
     /**
      * Check for pre-breaks
      */
-    if (PageBreakLocator::_hasForcedPageBreakBefore($box)) {
-      $locations[] = new PageBreakLocation($box->get_top_margin(), FORCED_PAGE_BREAK_BONUS);
-    } elseif (!is_null($previous) && $previous->getCSSProperty(CSS_PAGE_BREAK_AFTER) == PAGE_BREAK_AVOID) {
-      $locations[] = new PageBreakLocation($box->get_top_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
-    } elseif ($box->getCSSProperty(CSS_PAGE_BREAK_BEFORE) == PAGE_BREAK_AVOID) {
-      $locations[] = new PageBreakLocation($box->get_top_margin(), $penalty + PAGE_BREAK_BEFORE_AVOID_PENALTY);
+    if (PageBreakLocator::has_forced_page_break_before($box)) {
+      $location = new PageBreakLocation($box->get_top_margin(), FORCED_PAGE_BREAK_BONUS);
+    } elseif (!is_null($previous) && $previous->get_css_property(CSS_PAGE_BREAK_AFTER) == PAGE_BREAK_AVOID) {
+      $location = new PageBreakLocation($box->get_top_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
+    } elseif ($box->get_css_property(CSS_PAGE_BREAK_BEFORE) == PAGE_BREAK_AVOID) {
+      $location = new PageBreakLocation($box->get_top_margin(), $penalty + PAGE_BREAK_BEFORE_AVOID_PENALTY);
     } else {
-      $locations[] = new PageBreakLocation($box->get_top_margin(), $penalty);
+      $location = new PageBreakLocation($box->get_top_margin(), $penalty);
     };
+    $locations[] = $location;
 
     /**
      * Check for post-breaks
      */
-    if (PageBreakLocator::_hasForcedPageBreakAfter($box)) {
-      $locations[] = new PageBreakLocation($box->get_bottom_margin(), FORCED_PAGE_BREAK_BONUS);
-    } elseif (!is_null($next) && $next->getCSSProperty(CSS_PAGE_BREAK_BEFORE) == PAGE_BREAK_AVOID) { 
-      $locations[] = new PageBreakLocation($box->get_bottom_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
-    } elseif ($box->getCSSProperty(CSS_PAGE_BREAK_AFTER) == PAGE_BREAK_AVOID) {
-      $locations[] = new PageBreakLocation($box->get_bottom_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
+    if (PageBreakLocator::has_forced_page_break_after($box)) {
+      $location = new PageBreakLocation($box->get_bottom_margin(), FORCED_PAGE_BREAK_BONUS);
+    } elseif (!is_null($next) && $next->get_css_property(CSS_PAGE_BREAK_BEFORE) == PAGE_BREAK_AVOID) { 
+      $location = new PageBreakLocation($box->get_bottom_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
+    } elseif ($box->get_css_property(CSS_PAGE_BREAK_AFTER) == PAGE_BREAK_AVOID) {
+      $location = new PageBreakLocation($box->get_bottom_margin(), $penalty + PAGE_BREAK_AFTER_AVOID_PENALTY);
     } else {
-      $locations[] = new PageBreakLocation($box->get_bottom_margin(), $penalty);
+      $location = new PageBreakLocation($box->get_bottom_margin(), $penalty);
     }
+    $locations[] = $location;
 
     /**
      * Check for breaks inside this box
      * Note that this check should be done after page-break-before/after checks,
      * as 'penalty' value may be modified here
      */
-    if ($box->getCSSProperty(CSS_PAGE_BREAK_INSIDE) == PAGE_BREAK_AVOID) {
+    if ($box->get_css_property(CSS_PAGE_BREAK_INSIDE) == PAGE_BREAK_AVOID) {
       $penalty += PAGE_BREAK_INSIDE_AVOID_PENALTY;
     };        
 
@@ -298,8 +304,8 @@ class PageBreakLocator {
      * From my point of view, top and bottom borders should not affect page 
      * breaks (as they're not broken by page break), while left and right ones - should.
      */
-    $border_left =& $box->getCSSProperty(CSS_BORDER_LEFT);
-    $border_right =& $box->getCSSProperty(CSS_BORDER_RIGHT);
+    $border_left =& $box->get_css_property(CSS_BORDER_LEFT);
+    $border_right =& $box->get_css_property(CSS_BORDER_RIGHT);
 
     $has_left_border = $border_left->style != BS_NONE && $border_left->width->getPoints() > 0;
     $has_right_border = $border_left->style != BS_NONE && $border_left->width->getPoints() > 0;
@@ -311,12 +317,12 @@ class PageBreakLocator {
     /**
      * Process box content
      */
-    $locations = array_merge($locations, PageBreakLocator::_getPagesTraverse($box, $penalty));
+    $locations = array_merge($locations, PageBreakLocator::get_pages_traverse($box, $penalty));
 
     return $locations;
   }
 
-  function _getMoreBefore($base, $content, $size) {
+  function get_more_before($base, $content, $size) {
     $i = $base;
     $more_before = 0;
 
@@ -324,7 +330,8 @@ class PageBreakLocator {
       $i--;
       if (is_a($content[$i], 'InlineBox')) {
         $more_before += $content[$i]->get_line_box_count();
-      } elseif (is_a($content[$i], 'BRBox')) {
+      } elseif (is_a($content[$i], 'BRBox') ||
+                is_a($content[$i], 'GenericInlineBox')) {
         // Do nothing
       } else {
         return $more_before;
@@ -334,7 +341,7 @@ class PageBreakLocator {
     return $more_before;
   }
 
-  function _getMoreAfter($base, $content, $size) {
+  function get_more_after($base, $content, $size) {
     $i = $base;
     $more = 0;
 
@@ -342,7 +349,8 @@ class PageBreakLocator {
       $i++;
       if (is_a($content[$i], 'InlineBox')) {
         $more += $content[$i]->getLineBoxCount();
-      } elseif (is_a($content[$i], 'BRBox')) {
+      } elseif (is_a($content[$i], 'BRBox')  ||
+                is_a($content[$i], 'GenericInlineBox')) {
         // Do nothing
       } else {
         return $more;
@@ -352,14 +360,23 @@ class PageBreakLocator {
     return $more;
   }
 
-  function _getPagesTraverseTableRow(&$box, $penalty) {
+  function get_pages_traverse_table_row(&$box, $penalty) {
     $locations = array();
 
     $cells = $box->getChildNodes();
-    if (count($cells) > 0) {
-      $locations[] = new PageBreakLocation($cells[0]->get_top_margin(),    $penalty);
-      $locations[] = new PageBreakLocation($cells[0]->get_bottom_margin(), $penalty);
-    }
+
+    // Find first non-fake (not covered by a table row or cell span) cell
+    $i = 0;
+    $size = count($cells);
+    while ($i < $size &&
+           $cells[$i]->is_fake()) {
+      $i++;
+    };
+    // Now $i contains the index of the first content cell or $size of there was no one
+    if ($i < $size) {
+      $locations[] = new PageBreakLocation($cells[$i]->get_top_margin(),    $penalty);
+      $locations[] = new PageBreakLocation($cells[$i]->get_bottom_margin(), $penalty);
+    }; 
 
     $content_watermark = $cells[0]->get_top_margin() - $cells[0]->get_real_full_height();
 
@@ -367,42 +384,57 @@ class PageBreakLocator {
      * Process row content
      */
     $inside_penalty = $penalty;
-    if ($box->getCSSProperty(CSS_PAGE_BREAK_INSIDE) == PAGE_BREAK_AVOID) {
+    if ($box->get_css_property(CSS_PAGE_BREAK_INSIDE) == PAGE_BREAK_AVOID) {
       $inside_penalty += PAGE_BREAK_INSIDE_AVOID_PENALTY;
     };        
 
     $cells = $box->getChildNodes();
     $null = null;
-    $ungrouped_row_locations = PageBreakLocator::_getPagesTraverseBlock($cells[0], 
-                                                                       $null, 
-                                                                       $null, 
-                                                                       $inside_penalty);
+    $ungrouped_row_locations = PageBreakLocator::get_pages_traverse_block($cells[0], 
+                                                                          $null, 
+                                                                          $null, 
+                                                                          $inside_penalty);
     $row_locations = PageBreakLocator::sort_locations($ungrouped_row_locations);
 
     for ($i=1, $size = count($cells); $i < $size; $i++) {
-      $ungrouped_child_locations = PageBreakLocator::_getPagesTraverseBlock($cells[$i], 
-                                                                            $null, 
-                                                                            $null, 
-                                                                            $inside_penalty);
+      $ungrouped_child_locations = PageBreakLocator::get_pages_traverse_block($cells[$i], 
+                                                                              $null, 
+                                                                              $null, 
+                                                                              $inside_penalty);
       $child_locations = PageBreakLocator::sort_locations($ungrouped_child_locations);
 
+      $current_cell_content_watermark = $cells[$i]->get_top_margin() - $cells[$i]->get_real_full_height();
+
       $new_row_locations = array();
+
+      // Keep only locations available in all cells
 
       $current_row_location_index = 0;
       while ($current_row_location_index < count($row_locations)) {
         $current_row_location = $row_locations[$current_row_location_index];
-        for ($current_child_location_index = 0, $child_locations_total = count($child_locations);
-             $current_child_location_index < $child_locations_total;
-             $current_child_location_index++) {
-          $current_child_location = $child_locations[$current_child_location_index];
-          if ($current_child_location->location == $current_row_location->location) {
-            $new_row_locations[] = new PageBreakLocation($current_child_location->location,
-                                                         max($current_child_location->penalty,
-                                                             $current_row_location->penalty));
+
+        // Check if current row-wide location is below the current cell content;
+        // in this case, accept it immediately
+        if ($current_row_location->location < $current_cell_content_watermark) {
+          $new_row_locations[] = $current_row_location;
+        } else {
+          // Match all row locations agains the current cell's
+          for ($current_child_location_index = 0, $child_locations_total = count($child_locations);
+               $current_child_location_index < $child_locations_total;
+               $current_child_location_index++) {
+            $current_child_location = $child_locations[$current_child_location_index];
+            if ($current_child_location->location == $current_row_location->location) {
+              $new_row_locations[] = new PageBreakLocation($current_child_location->location,
+                                                           max($current_child_location->penalty,
+                                                               $current_row_location->penalty));
+            };
           };
         };
+
         $current_row_location_index++;
       };
+
+      // Add locations available below content in previous cells
 
       for ($current_child_location_index = 0, $child_locations_total = count($child_locations);
            $current_child_location_index < $child_locations_total;
@@ -423,7 +455,7 @@ class PageBreakLocator {
     return $locations;
   }
 
-  function _getPagesTraverseInline(&$box, $penalty, $more_before, $more_after) {
+  function get_pages_traverse_inline(&$box, $penalty, $more_before, $more_after) {
     $locations = array();
 
     /**
@@ -431,6 +463,7 @@ class PageBreakLocator {
      */
 
     $size = $box->get_line_box_count();    
+
     if ($size == 0) {
       return $locations;
     };
@@ -439,13 +472,13 @@ class PageBreakLocator {
     // $more_before parameter > 0), we  may break page on the top edge
     // of the first line box
     if ($more_before > 0) {
-      if ($more_before < $box->parent->getCSSProperty(CSS_ORPHANS)) {
+      if ($more_before < $box->parent->get_css_property(CSS_ORPHANS)) {
         $orphans_penalty = PAGE_BREAK_ORPHANS_PENALTY;
       } else {
         $orphans_penalty = 0;
       };
     
-      if ($box->parent->getCSSProperty(CSS_WIDOWS) > $size + $more_after) {
+      if ($box->parent->get_css_property(CSS_WIDOWS) > $size + $more_after) {
         $widows_penalty  = PAGE_BREAK_WIDOWS_PENALTY;
       } else {
         $widows_penalty  = 0;
@@ -460,13 +493,13 @@ class PageBreakLocator {
     // $more_after parameter >  0), we may break page  on the top edge
     // of the first line box
     if ($more_after > 0) {
-      if ($size + 1 + $more_before < $box->parent->getCSSProperty(CSS_ORPHANS)) {
+      if ($size + 1 + $more_before < $box->parent->get_css_property(CSS_ORPHANS)) {
         $orphans_penalty = PAGE_BREAK_ORPHANS_PENALTY;
       } else {
         $orphans_penalty = 0;
       };
     
-      if ($size + 1 + $box->parent->getCSSProperty(CSS_WIDOWS) > $size + $more_after) {
+      if ($size + 1 + $box->parent->get_css_property(CSS_WIDOWS) > $size + $more_after) {
         $widows_penalty  = PAGE_BREAK_WIDOWS_PENALTY;
       } else {
         $widows_penalty  = 0;
@@ -481,16 +514,16 @@ class PageBreakLocator {
     // box; it is required, as bottom of the last line box will be the
     // same as  the bottom of  the container block box.  Break penalty
     // should be calculated using block-box level data
-    for ($i=0; $i<$size-1; $i++) {
+    for ($i = 0; $i < $size - 1; $i++) {
       $line_box = $box->get_line_box($i);
 
-      if ($i + 1 + $more_before < $box->parent->getCSSProperty(CSS_ORPHANS)) {
+      if ($i + 1 + $more_before < $box->parent->get_css_property(CSS_ORPHANS)) {
         $orphans_penalty = PAGE_BREAK_ORPHANS_PENALTY;
       } else {
         $orphans_penalty = 0;
       };
 
-      if ($i + 1 + $box->parent->getCSSProperty(CSS_WIDOWS) > $size + $more_after) {
+      if ($i + 1 + $box->parent->get_css_property(CSS_WIDOWS) > $size + $more_after) {
         $widows_penalty  = PAGE_BREAK_WIDOWS_PENALTY;
       } else {
         $widows_penalty  = 0;
@@ -503,7 +536,7 @@ class PageBreakLocator {
     return $locations;
   }
 
-  function &_getPrevious($index, $content, $size) {
+  function &get_previous($index, $content, $size) {
     for ($i = $index - 1; $i>=0; $i--) {
       $child = $content[$i];
       if (!$child->is_null()) {
@@ -515,7 +548,7 @@ class PageBreakLocator {
     return $dummy;
   }
 
-  function &_getNext($index, &$content, $size) {
+  function &get_next($index, &$content, $size) {
     for ($i=$index + 1; $i<$size; $i++) {
       $child =& $content[$i];
       if (!$child->is_null()) {
@@ -527,7 +560,7 @@ class PageBreakLocator {
     return $dummy;
   }
 
-  function _getPagesTraverse(&$box, $penalty) {
+  function get_pages_traverse(&$box, $penalty) {
     if (!is_a($box, 'GenericContainerBox')) { 
       return array(); 
     };
@@ -535,8 +568,8 @@ class PageBreakLocator {
     $locations = array();
 
     for ($i=0, $content_size = count($box->content); $i<$content_size; $i++) {
-      $previous_child =& PageBreakLocator::_getPrevious($i, $box->content, $content_size);
-      $next_child     =& PageBreakLocator::_getNext($i, $box->content, $content_size);
+      $previous_child =& PageBreakLocator::get_previous($i, $box->content, $content_size);
+      $next_child     =& PageBreakLocator::get_next($i, $box->content, $content_size);
       $child          =& $box->content[$i];
 
       /**
@@ -545,29 +578,30 @@ class PageBreakLocator {
       if (is_a($child, 'BRBox')) {
         // Do nothing
       } elseif ($child->isBlockLevel()) {
-        $locations = array_merge($locations, PageBreakLocator::_getPagesTraverseBlock($child, 
-                                                                                      $next_child,
-                                                                                      $previous_child,
-                                                                                      $penalty));
+        $locations = array_merge($locations, PageBreakLocator::get_pages_traverse_block($child, 
+                                                                                        $next_child,
+                                                                                        $previous_child,
+                                                                                        $penalty));
+
       } elseif (is_a($child, 'TableCellBox')) {
         $null = null;
-        $child_locations = PageBreakLocator::_getPagesTraverseBlock($child, $null, $null, $penalty);
+        $child_locations = PageBreakLocator::get_pages_traverse_block($child, $null, $null, $penalty);
         $locations = array_merge($locations, $child_locations);
       } elseif (is_a($child, 'InlineBox')) {
         $more_before = 0;
         $more_after  = 0;
 
         if (is_a($previous_child, 'BRBox')) {
-          $more_before = PageBreakLocator::_getMoreBefore($i, $box->content, $content_size);
+          $more_before = PageBreakLocator::get_more_before($i, $box->content, $content_size);
         };
 
         if (is_a($next_child, 'BRBox')) {
-          $more_after = PageBreakLocator::_getMoreAfter($i, $box->content, $content_size);
+          $more_after = PageBreakLocator::get_more_after($i, $box->content, $content_size);
         };
 
-        $locations = array_merge($locations, PageBreakLocator::_getPagesTraverseInline($child, $penalty, $more_before, $more_after));
+        $locations = array_merge($locations, PageBreakLocator::get_pages_traverse_inline($child, $penalty, $more_before, $more_after));
       } elseif (is_a($child, 'TableRowBox')) {
-        $locations = array_merge($locations, PageBreakLocator::_getPagesTraverseTableRow($child, $penalty));
+        $locations = array_merge($locations, PageBreakLocator::get_pages_traverse_table_row($child, $penalty));
       };
     };
 

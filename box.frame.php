@@ -4,7 +4,7 @@
 class FrameBox extends GenericContainerBox {
   function &create(&$root, &$pipeline) {
     $box =& new FrameBox($root, $pipeline);
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     return $box;
   }
 
@@ -67,7 +67,7 @@ class FrameBox extends GenericContainerBox {
      * @todo Update the family of get_..._width function so that they would apply constraint
      * using the containing block width, not "real" parent width
      */
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
 
     $containing_block =& $this->_get_containing_block();
     $this->put_width($wc->apply($this->get_width(), 
@@ -89,29 +89,29 @@ class FrameBox extends GenericContainerBox {
      * we need to offset it, as we assumed it had zero width and height at
      * the moment we placed it
      */
-    $right = $this->getCSSProperty(CSS_RIGHT);
-    $left  = $this->getCSSProperty(CSS_LEFT);
+    $right = $this->get_css_property(CSS_RIGHT);
+    $left  = $this->get_css_property(CSS_LEFT);
     if ($left->isAuto() && !$right->isAuto()) {
       $this->offset(-$this->get_width(), 0);
     };
 
-    $bottom = $this->getCSSProperty(CSS_BOTTOM);
-    $top    = $this->getCSSProperty(CSS_TOP);
+    $bottom = $this->get_css_property(CSS_BOTTOM);
+    $top    = $this->get_css_property(CSS_TOP);
     if ($top->isAuto() && !$bottom->isAuto()) {
       $this->offset(0, $this->get_height());
     };
   }
 
   function FrameBox(&$root, &$pipeline) {
-    $css_state =& $pipeline->getCurrentCSSState();
+    $css_state =& $pipeline->get_current_css_state();
 
     // Inherit 'border' CSS value from parent (FRAMESET tag), if current FRAME 
     // has no FRAMEBORDER attribute, and FRAMESET has one
     $parent = $root->parent();
     if (!$root->has_attribute('frameborder') &&
         $parent->has_attribute('frameborder')) {
-      $parent_border = $css_state->getPropertyOnLevel(CSS_BORDER, CSS_PROPERTY_LEVEL_PARENT);
-      $css_state->setProperty(CSS_BORDER, $parent_border->copy());
+      $parent_border = $css_state->get_propertyOnLevel(CSS_BORDER, CSS_PROPERTY_LEVEL_PARENT);
+      $css_state->set_property(CSS_BORDER, $parent_border->copy());
     }
 
     $this->GenericContainerBox($root);
@@ -149,17 +149,16 @@ class FrameBox extends GenericContainerBox {
       
     // Save current stylesheet, as each frame may load its own stylesheets
     //
-    $pipeline->pushCSS();
-    $css =& $pipeline->getCurrentCSS();
-    $css->scan_styles($tree, $pipeline);
+    $pipeline->push_css();
+    $pipeline->scan_styles($tree);
+
+    $box_child =& DOMBuilder::build($tree, $pipeline);
     
-    $frame_root = traverse_dom_tree_pdf($tree);   
-    $box_child  =& create_pdf_box($frame_root, $pipeline);
     $this->add_child($box_child);
     
     // Restore old stylesheet
     //
-    $pipeline->popCSS();
+    $pipeline->pop_css();
 
     $pipeline->pop_base_url();
   }
@@ -170,8 +169,8 @@ class FrameBox extends GenericContainerBox {
    * box had 'position: static'
    */
   function _positionAbsoluteVertically($containing_block) {
-    $bottom = $this->getCSSProperty(CSS_BOTTOM);
-    $top    = $this->getCSSProperty(CSS_TOP);
+    $bottom = $this->get_css_property(CSS_BOTTOM);
+    $top    = $this->get_css_property(CSS_TOP);
 
     if (!$top->isAuto()) {
       if ($top->isPercentage()) {
@@ -196,8 +195,8 @@ class FrameBox extends GenericContainerBox {
    * method which could be used if this box had 'position: static'
    */
   function _positionAbsoluteHorizontally($containing_block) {
-    $left  = $this->getCSSProperty(CSS_LEFT);
-    $right = $this->getCSSProperty(CSS_RIGHT);
+    $left  = $this->get_css_property(CSS_LEFT);
+    $right = $this->get_css_property(CSS_RIGHT);
 
     if (!$left->isAuto()) { 
       if ($left->isPercentage()) {
@@ -223,7 +222,7 @@ class FramesetBox extends GenericContainerBox {
 
   function &create(&$root, &$pipeline) {
     $box =& new FramesetBox($root, $pipeline);
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     return $box;
   }
 

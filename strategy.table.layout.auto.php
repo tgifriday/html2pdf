@@ -79,8 +79,8 @@ class StrategyTableLayoutAuto {
     $minwc = array();
     $maxwc = array();
 
-    $cellpadding = $table->getCSSProperty(CSS_HTML2PS_CELLPADDING);
-    $cellspacing = $table->getCSSProperty(CSS_HTML2PS_CELLSPACING);
+    $cellpadding = $table->get_css_property(CSS_HTML2PS_CELLPADDING);
+    $cellspacing = $table->get_css_property(CSS_HTML2PS_CELLSPACING);
 
     for ($i=0; $i<count($minw); $i++) {
       $cwc = $table->get_cwc($i);
@@ -209,7 +209,7 @@ class StrategyTableLayoutAuto {
     //
     // e.g. empty column (with zero width) and fixed-width column.
     //
-    $wc = $table->getCSSProperty(CSS_WIDTH);
+    $wc = $table->get_css_property(CSS_WIDTH);
     if (!$wc->isNull()) {
       if (array_sum($widths) < $width) {     
         // Let's make zero-width columns

@@ -12,6 +12,10 @@
 /**
  * Heavily patched to adapt to the HTML2PS/HTML2PDF script requirements by 
  * Konstantin Bournayev (bkon@bkon.ru)
+ *
+ * Note: this FPDF variant assumes that magic_quotes_runtime are disabled;
+ * the reason is that HTML2PS/PDF explicitly disables them during pipeline 
+ * processing, thus all calls to FPDF API are "safe"
  */
 
 if (!class_exists('FPDF')) {
@@ -2077,19 +2081,24 @@ EOF
      * Accepts PNG images only
      */
     function Image($file, $x, $y, $w, $h) {
-      // Put an image on the page
+      // Image used first time, parse input file
       if (!isset($this->images[$file])) {
-        $mqr=get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
-        $info=$this->_parsepng($file);
-        set_magic_quotes_runtime($mqr);
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        switch ($ext) {
+        case 'jpg':
+        case 'jpeg':
+          $info = $this->_parsejpg($file);
+          break;
+        case 'png':
+          $info = $this->_parsepng($file);
+          break;
+        };
 
-        $info['i']=count($this->images)+1;
-        $this->images[$file]=$info;
-      } else {
-        $info=$this->images[$file];
+        $info['i'] = count($this->images) + 1;
+        $this->images[$file] = $info;
       };
 
+      $info = $this->images[$file];
       $this->_out(sprintf('q %.2f 0 0 %.2f %.2f %.2f cm /I%d Do Q',
                           $w*$this->k,
                           $h*$this->k,
@@ -2217,8 +2226,6 @@ EOF
         $cmap->out($this);
       }
       
-      $mqr=get_magic_quotes_runtime();
-      set_magic_quotes_runtime(0);
       foreach ($this->FontFiles as $file=>$info) {
         //Font file embedding
         $this->_newobj();
@@ -2258,7 +2265,6 @@ EOF
         $this->_putstream($font);
         $this->_out('endobj');
       }
-      set_magic_quotes_runtime($mqr);
 
       foreach ($this->fonts as $k=>$font) {
         //Font objects
@@ -2548,9 +2554,46 @@ EOF
       $this->_out($num.' 0 obj');
     }
 
-    function _parsepng($file) {
-      //Extract info from a PNG file
+    // Extract info from a JPEG file
+    function _parsejpg($file) {
+      $size_info = GetImageSize($file);
+      if (!$size_info) {
+        $this->Error('Missing or incorrect image file: '.$file);
+      };
+
+      if ($size_info[2]!=2) {
+        $this->Error('Not a JPEG file: '.$file);
+      };
+
+      if (!isset($size_info['channels']) || $size_info['channels']==3) {
+        $colspace='DeviceRGB';
+      } elseif($size_info['channels']==4) {
+        $colspace='DeviceCMYK';
+      } else {
+        $colspace='DeviceGray';
+      };
+
+      $bpc = isset($size_info['bits']) ? $size_info['bits'] : 8;
+
+      //Read whole file
       $f=fopen($file,'rb');
+      $data='';
+      while (!feof($f)) {
+        $data .= fread($f, 4096);
+      };
+      fclose($f);
+
+      return array('w' => $size_info[0],
+                   'h' => $size_info[1],
+                   'cs' => $colspace,
+                   'bpc' => $bpc,
+                   'f' => 'DCTDecode',
+                   'data' => $data);
+    }
+
+    // Extract info from a PNG file
+    function _parsepng($file) {
+      $f = fopen($file,'rb');
       if (!$f) {
         $this->Error('Can\'t open image file: '.$file);
       };
@@ -2566,9 +2609,9 @@ EOF
         $this->Error('Incorrect PNG file: '.$file);
       };
 
-      $w=$this->_freadint($f);
-      $h=$this->_freadint($f);
-      $bpc=ord(fread($f,1));
+      $w = $this->_freadint($f);
+      $h = $this->_freadint($f);
+      $bpc = ord(fread($f,1));
 
       if ($bpc>8) {
         $this->Error('16-bit depth not supported: '.$file);

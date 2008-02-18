@@ -39,7 +39,7 @@ class MyFetcherLocalFile extends Fetcher {
   }
 
   function get_base_url() {
-    return "file:///C:/rac/html2ps/samples/";
+    return "file:///C:/rac/html2ps/test/";
   }
 }
 

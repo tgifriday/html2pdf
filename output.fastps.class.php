@@ -39,11 +39,7 @@ class OutputDriverFastPS extends OutputDriverGenericPS {
   }
 
   function close() {
-    if ($this->status != FASTPS_STATUS_OUTPUT_STARTED) { 
-      return; 
-    }
     $this->_terminate_output();
-
     fclose($this->data);
   }
 
@@ -356,7 +352,7 @@ class OutputDriverFastPS extends OutputDriverGenericPS {
      * Prepare the PS file header
      * Note that %PS-Adobe-3.0 refers to DSC version, NOT language level
      */
-    $header = file_get_contents(HTML2PS_DIR.'/postscript/fastps.header.ps');
+    $header = file_get_contents(HTML2PS_DIR.'postscript/fastps.header.ps');
 
     global $g_config;
     $header = preg_replace("/##PS2PDF##/",
@@ -373,7 +369,7 @@ class OutputDriverFastPS extends OutputDriverGenericPS {
     fwrite($this->data, "\n");
     fwrite($this->data, $this->_document_body);
 
-    $footer = file_get_contents(HTML2PS_DIR.'/postscript/fastps.footer.ps');
+    $footer = file_get_contents(HTML2PS_DIR.'postscript/fastps.footer.ps');
     fwrite($this->data, $footer);
   }
 
