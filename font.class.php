@@ -162,7 +162,7 @@ class FontType1 extends Font {
       $_typeface = $typeface;
 
       ob_start();
-      include(HTML2PS_DIR.'templates/error._missing_afm.tpl');
+      include(HTML2PS_DIR.'/templates/error._missing_afm.tpl');
       $this->error_message = ob_get_contents();
       ob_end_clean();
 

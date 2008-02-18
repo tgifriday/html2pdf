@@ -157,11 +157,11 @@ class CSSVerticalAlign extends CSSPropertyHandler {
       is_inline_element($display);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_VERTICAL_ALIGN;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'vertical-align';
   }
 }

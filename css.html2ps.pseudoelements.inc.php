@@ -18,11 +18,11 @@ class CSSHTML2PSPseudoelements extends CSSPropertyHandler {
     return $value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_PSEUDOELEMENTS;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-pseudoelements';
   }
 }

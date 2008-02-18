@@ -40,11 +40,11 @@ class CSSMinHeight extends CSSPropertyHandler {
     return ValueMinHeight::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_MIN_HEIGHT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'min-height';
   }
 }

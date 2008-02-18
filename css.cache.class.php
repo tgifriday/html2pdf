@@ -23,25 +23,21 @@ class CSSCache {
     return is_readable($cache_filename);
   }
 
-  function &_readCached($url) {
+  function _readCached($url) {
     $cache_filename = $this->_getCacheFilename($url);
-    $obj = unserialize(file_get_contents($cache_filename));
-    return $obj;
+    return unserialize(file_get_contents($cache_filename));
   }
 
   function _putCached($url, $css) {
     file_put_contents($this->_getCacheFilename($url), serialize($css));
   }
 
-  function &compile($url, $css, &$pipeline) {
+  function compile($url, $css) {
     if ($this->_isCached($url)) {
       return $this->_readCached($url);
     } else {
-      // Process
-      $css_processor =& new CSSProcessor(); 
-      $css_processor->set_pipeline($pipeline);
-      $cssruleset = $css_processor->import_source($css, $url);
-
+      $cssruleset = new CSSRuleset();
+      $cssruleset->parse_css($css, new Pipeline());
       $this->_putCached($url, $cssruleset);
       return $cssruleset;
     };

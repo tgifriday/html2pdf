@@ -33,11 +33,11 @@ class CSSListStyleImage extends CSSSubFieldProperty {
     return CSSListStyleImage::default_value();
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_LIST_STYLE_IMAGE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'list-style-image';
   }
 }

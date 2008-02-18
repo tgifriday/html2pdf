@@ -82,11 +82,11 @@ class CSSContent extends CSSPropertyHandler {
     return $value_obj;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_CONTENT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'content';
   }
 }

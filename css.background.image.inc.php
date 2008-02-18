@@ -2,11 +2,11 @@
 // $Header: /cvsroot/html2ps/css.background.image.inc.php,v 1.16 2006/07/09 09:07:44 Konstantin Exp $
 
 class CSSBackgroundImage extends CSSSubFieldProperty {
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BACKGROUND_IMAGE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'background-image';
   }
 
@@ -23,7 +23,7 @@ class CSSBackgroundImage extends CSSSubFieldProperty {
     if ($value === 'inherit') {
       return CSS_PROPERTY_INHERIT;
     }
-    
+
     // 'url' value
     if (preg_match("/url\((.*[^\\\\]?)\)/is",$value,$matches)) {
       $url = $matches[1];

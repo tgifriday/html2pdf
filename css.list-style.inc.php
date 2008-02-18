@@ -25,11 +25,11 @@ class CSSListStyle extends CSSPropertyHandler {
 
   function default_value() { return $this->default_value; }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_LIST_STYLE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'list-style';
   }
 }

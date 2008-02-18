@@ -72,7 +72,7 @@ class BoxPageMargin extends GenericContainerBox {
   }
 
   function BoxPageMargin(&$pipeline, $at_rule) {
-    $state =& $pipeline->get_current_css_state();
+    $state =& $pipeline->getCurrentCSSState();
     $state->pushDefaultState();
 
     $root = null;
@@ -87,7 +87,7 @@ class BoxPageMargin extends GenericContainerBox {
      * Check whether 'content' or '-html2ps-html-content' properties had been defined 
      * (if both properties are defined, -html2ps-html-content takes precedence)
      */
-    $raw_html_content =& $at_rule->get_css_property(CSS_HTML2PS_HTML_CONTENT);
+    $raw_html_content =& $at_rule->getCSSProperty(CSS_HTML2PS_HTML_CONTENT);
     $html_content = $raw_html_content->render($pipeline->get_counters());
 
     if ($html_content !== '') {
@@ -96,12 +96,11 @@ class BoxPageMargin extends GenericContainerBox {
 
       $html_content = html2xhtml("<div>".$html_content."</div>");
       $tree = TreeBuilder::build($html_content);
-
-      $body_box =& DOMBuilder::build($tree, $pipeline);
-
+      $tree_root = traverse_dom_tree_pdf($tree);
+      $body_box =& create_pdf_box($tree_root, $pipeline);
       $box =& $body_box->content[0];
     } else {
-      $raw_content =& $at_rule->get_css_property(CSS_CONTENT);
+      $raw_content =& $at_rule->getCSSProperty(CSS_CONTENT);
       $content = $raw_content->render($pipeline->get_counters());
 
       $box =& InlineBox::create_from_text($content,
@@ -132,7 +131,7 @@ class BoxPageMargin extends GenericContainerBox {
     /**
      * Apply vertical-align (behave like table cell)
      */
-    $va = CSSVerticalAlign::value2pdf($this->get_css_property(CSS_VERTICAL_ALIGN));
+    $va = CSSVerticalAlign::value2pdf($this->getCSSProperty(CSS_VERTICAL_ALIGN));
 
     $va->apply_cell($this,$this->get_full_height(),0);
   }

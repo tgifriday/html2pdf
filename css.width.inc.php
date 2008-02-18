@@ -9,11 +9,11 @@ class CSSCompositeWidth extends CSSPropertyHandler {
     $this->CSSPropertyHandler(false, false); 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_COMPOSITE_WIDTH;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-composite-width';
   }
 
@@ -27,13 +27,13 @@ class CSSWidth extends CSSSubProperty {
     $this->CSSSubProperty($owner);
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     $min = $owner_value->_min_width;
     $owner_value = $value->copy();
     $owner_value->_min_width = $min;
   }
 
-  function &get_value(&$owner_value) {
+  function &getValue(&$owner_value) {
     return $owner_value;
   }
 
@@ -47,14 +47,14 @@ class CSSWidth extends CSSSubProperty {
     };
 
     // Check if user specified empty value
-    if ($value === '') { return new WCNone; };
+    if ($value === "") { return new WCNone; };
 
     // Check if this value is 'auto' - default value of this property
     if ($value === 'auto') {
       return new WCNone;
     };
 
-    if (substr($value,strlen($value)-1,1) == '%') {
+    if (substr($value,strlen($value)-1,1) == "%") {
       // Percentage 
       return new WCFraction(((float)$value)/100);
     } else {
@@ -63,11 +63,11 @@ class CSSWidth extends CSSSubProperty {
     }
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_WIDTH;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'width';
   }
 }

@@ -25,7 +25,7 @@ class StrategyWidthMax {
     $this->_maxw = 0;
 
     // We need to add text indent to the max width
-    $text_indent = $box->get_css_property(CSS_TEXT_INDENT);
+    $text_indent = $box->getCSSProperty(CSS_TEXT_INDENT);
     $this->_cmaxw = $text_indent->calculate($box);
     
     for ($i=0, $size = count($box->content); $i<$size; $i++) {
@@ -36,14 +36,14 @@ class StrategyWidthMax {
         
       } elseif (!$child->out_of_flow()) {
         if (is_inline($child) || 
-            $child->get_css_property(CSS_FLOAT) !== FLOAT_NONE) {
+            $child->getCSSProperty(CSS_FLOAT) !== FLOAT_NONE) {
           $this->add_width($child->get_max_width($context, $this->_limit));
         } else {
           $this->line_break();
           $this->add_width($child->get_max_width($context, $this->_limit));
           
           // Process special case with percentage constrained table
-          $item_wc = $child->get_css_property(CSS_WIDTH);
+          $item_wc = $child->getCSSProperty(CSS_WIDTH);
           
           if (is_a($child,    "TableBox") &&
               is_a($item_wc, "WCFraction")) {
@@ -63,7 +63,7 @@ class StrategyWidthMax {
     // Note that max width cannot differ from constrained width,
     // if any width constraints apply
     //
-    $wc = $box->get_css_property(CSS_WIDTH);
+    $wc = $box->getCSSProperty(CSS_WIDTH);
     if ($wc->applicable($box)) {
       if ($box->parent) {
         $this->_maxw = $wc->apply($this->_maxw, $box->parent->get_width());

@@ -35,11 +35,11 @@ class CSSTextAlign extends CSSPropertyStringSet {
     }
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_TEXT_ALIGN;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'text-align';
   }
 }

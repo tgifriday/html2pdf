@@ -38,11 +38,11 @@ class CSSBottom extends CSSPropertyHandler {
     return $this->_getAutoValue();
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BOTTOM;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'bottom';
   }
 

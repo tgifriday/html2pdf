@@ -13,11 +13,11 @@ class CSSOrphans extends CSSPropertyHandler {
     return (int)$value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_ORPHANS;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'orphans';
   }
 }

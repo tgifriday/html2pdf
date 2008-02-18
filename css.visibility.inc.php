@@ -19,11 +19,11 @@ class CSSVisibility extends CSSPropertyStringSet {
     return VISIBILITY_VISIBLE; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_VISIBILITY;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'visibility';
   }
 }

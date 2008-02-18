@@ -18,11 +18,11 @@ class CSSColor extends CSSPropertyHandler {
     return parse_color_declaration($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_COLOR;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'color';
   }
 }

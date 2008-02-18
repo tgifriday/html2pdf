@@ -43,11 +43,11 @@ class CSSMaxHeight extends CSSPropertyHandler {
     return ValueMaxHeight::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_MAX_HEIGHT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'max-height';
   }
 }

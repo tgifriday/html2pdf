@@ -14,11 +14,11 @@ class CSSPage extends CSSPropertyHandler {
     return $value;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_PAGE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'page';
   }
 }

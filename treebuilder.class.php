@@ -23,7 +23,7 @@ class TreeBuilder {
     };
 
     require_once(HTML2PS_DIR.'dom.activelink.inc.php');
-    if (file_exists(HTML2PS_DIR.'classes/include.php')) { 
+    if (file_exists(HTML2PS_DIR.'/classes/include.php')) { 
       require_once(HTML2PS_DIR.'classes/include.php');
       import('org.active-link.xml.XML');
       import('org.active-link.xml.XMLDocument');

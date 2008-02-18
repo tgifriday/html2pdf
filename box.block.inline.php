@@ -18,7 +18,7 @@ class InlineBlockBox extends GenericContainerBox {
    */
   function &create(&$root, &$pipeline) {
     $box = new InlineBlockBox();
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
     $box->create_content($root, $pipeline);
     return $box;
   }
@@ -54,7 +54,7 @@ class InlineBlockBox extends GenericContainerBox {
      * @link http://www.w3.org/TR/CSS21/visuren.html#dis-pos-flo CSS 2.1: Relationships between 'display', 'position', and 'float'
      */
 
-    switch ($this->get_css_property(CSS_POSITION)) {
+    switch ($this->getCSSProperty(CSS_POSITION)) {
     case POSITION_STATIC:
       return $this->reflow_static($parent, $context);
 
@@ -136,7 +136,7 @@ class InlineBlockBox extends GenericContainerBox {
      * Calculate element's baseline, as it should be aligned inside the 
      * parent's line box vertically
      */
-    $font = $this->get_css_property(CSS_FONT);
+    $font = $this->getCSSProperty(CSS_FONT);
     $this->default_baseline = $this->get_height() + $font->size->getPoints();
     
     /**

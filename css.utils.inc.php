@@ -46,7 +46,7 @@ function _fix_tag_display($default_display, &$state, &$pipeline) {
     
   case '-button':
     // INPUT buttons will always have 'display: -button' (in latter case if display = 'block', we'll use a wrapper box)
-    $css_state =& $pipeline->get_current_css_state();
+    $css_state =& $pipeline->getCurrentCSSState();
     if ($handler->get($css_state->getState()) === 'block') {
       $need_block_wrapper = true;
     };

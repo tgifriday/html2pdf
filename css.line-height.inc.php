@@ -53,11 +53,11 @@ class CSSLineHeight extends CSSSubFieldProperty {
     return new LineHeight_Absolute($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_LINE_HEIGHT;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'line-height';
   }
 }

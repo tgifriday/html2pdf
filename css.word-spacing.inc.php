@@ -28,11 +28,11 @@ class CSSWordSpacing extends CSSPropertyHandler {
     return Value::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_WORD_SPACING;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'word-spacing';
   }
 }

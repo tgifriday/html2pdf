@@ -53,12 +53,12 @@ class TableBox extends GenericContainerBox {
 
   function &create(&$root, &$pipeline) {
     $box =& new TableBox();   
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
 
     // This row should not inherit any table specific properties!
     // 'overflow' for example
     //
-    $css_state =& $pipeline->get_current_css_state();
+    $css_state =& $pipeline->getCurrentCSSState();
     $css_state->pushDefaultState();
 
     $row =& new TableRowBox($root);
@@ -69,7 +69,7 @@ class TableBox extends GenericContainerBox {
     $css_state->popState();
 
     // Setup cellspacing / cellpadding values
-    if ($box->get_css_property(CSS_BORDER_COLLAPSE) == BORDER_COLLAPSE) {
+    if ($box->getCSSProperty(CSS_BORDER_COLLAPSE) == BORDER_COLLAPSE) {
       $handler =& CSS::get_handler(CSS_PADDING);
       $box->setCSSProperty(CSS_PADDING, $handler->default_value());
     };
@@ -234,7 +234,7 @@ class TableBox extends GenericContainerBox {
         if ($cell->colspan > 1) { continue; }
 
         // Put current cell width constraint as a columns with constraint
-        $this->cwc[$i] = merge_width_constraint($this->cwc[$i], $cell->get_css_property(CSS_WIDTH));
+        $this->cwc[$i] = merge_width_constraint($this->cwc[$i], $cell->getCSSProperty(CSS_WIDTH));
 
         // Now reset the cell width constraint; cell width should be affected by ceolumn constraint only
         $cell->setCSSProperty(CSS_WIDTH, new WCNone);
@@ -276,7 +276,7 @@ class TableBox extends GenericContainerBox {
        * Note that there should be '>='; '==' is not enough, as sometimes cell is declared to span 
        * more columns than there are in the table
        */
-      $cell_wc = $cell->get_css_property(CSS_WIDTH);
+      $cell_wc = $cell->getCSSProperty(CSS_WIDTH);
       if (!$cell->is_fake() &&
           $cell_wc->isFraction() &&
           $cell->colspan >= count($this->content[$j])) {
@@ -437,7 +437,7 @@ class TableBox extends GenericContainerBox {
       $baseline = $this->content[$span->row]->get_row_baseline();
 
       // apply vertical-align
-      $vertical_align = $cell->get_css_property(CSS_VERTICAL_ALIGN);
+      $vertical_align = $cell->getCSSProperty(CSS_VERTICAL_ALIGN);
 
       $va_fun = CSSVerticalAlign::value2pdf($vertical_align);
       $va_fun->apply_cell($cell, array_sum($row_heights), $baseline);       
@@ -654,7 +654,7 @@ class TableBox extends GenericContainerBox {
     $width = array_sum($widths);
     $base_width = $width;
 
-    $wc = $this->get_css_property(CSS_WIDTH);
+    $wc = $this->getCSSProperty(CSS_WIDTH);
     if (!$wc->isNull()) {
       // Check if constrained table width should be expanded to fit the table contents
       //
@@ -681,7 +681,7 @@ class TableBox extends GenericContainerBox {
   }
 
   function get_max_width(&$context) {
-    $wc = $this->get_css_property(CSS_WIDTH);
+    $wc = $this->getCSSProperty(CSS_WIDTH);
 
     if ($wc->isConstant()) {
       return $wc->apply(0, $this->parent->get_available_width($context));
@@ -715,8 +715,8 @@ class TableBox extends GenericContainerBox {
   }
 
   function get_width() {
-    $wc  = $this->get_css_property(CSS_WIDTH);
-    $pwc = $this->parent->get_css_property(CSS_WIDTH);
+    $wc  = $this->getCSSProperty(CSS_WIDTH);
+    $pwc = $this->parent->getCSSProperty(CSS_WIDTH);
 
     if (!$this->parent->isCell() || 
         !$pwc->isNull() ||
@@ -736,7 +736,7 @@ class TableBox extends GenericContainerBox {
   }
 
   function table_column_widths(&$context) {
-    $table_layout = $this->get_css_property(CSS_TABLE_LAYOUT);
+    $table_layout = $this->getCSSProperty(CSS_TABLE_LAYOUT);
     switch ($table_layout) {
     case TABLE_LAYOUT_FIXED:
 //       require_once(HTML2PS_DIR.'strategy.table.layout.fixed.php');
@@ -768,9 +768,9 @@ class TableBox extends GenericContainerBox {
       // if table width is not constrained, we should not do this, as current value 
       // of $table->get_width is maximal width (parent width), not the actual 
       // width of the table
-      $wc = $this->get_css_property(CSS_WIDTH);
+      $wc = $this->getCSSProperty(CSS_WIDTH);
       if (!$wc->isNull()) {
-        $cell_wc = $cell->get_css_property(CSS_WIDTH);
+        $cell_wc = $cell->getCSSProperty(CSS_WIDTH);
         $cell_width = $cell_wc->apply($cell_width, $this->get_width());
 
         // On the other side, constrained with cannot be less than cell minimal width
@@ -895,7 +895,7 @@ class TableBox extends GenericContainerBox {
   function check_constrained_colspan($col) {
     for ($i=0; $i<$this->rows_count(); $i++) {
       $cell =& $this->cell($i, $col);
-      $cell_wc = $cell->get_css_property(CSS_WIDTH);
+      $cell_wc = $cell->getCSSProperty(CSS_WIDTH);
 
       if ($cell->colspan > 1 && 
           !$cell_wc->isNull()) { 
@@ -961,7 +961,7 @@ class TableBox extends GenericContainerBox {
 
   // Flow-control
   function reflow(&$parent, &$context) {
-    if ($this->get_css_property(CSS_FLOAT) === FLOAT_NONE) {
+    if ($this->getCSSProperty(CSS_FLOAT) === FLOAT_NONE) {
       $status = $this->reflow_static_normal($parent, $context);
     } else {
       $status = $this->reflow_static_float($parent, $context);
@@ -979,7 +979,7 @@ class TableBox extends GenericContainerBox {
     // Calculate width value if it had been set as a percentage
     $this->_calc_percentage_width($parent, $context);
 
-    $wc = $this->get_css_property(CSS_WIDTH);
+    $wc = $this->getCSSProperty(CSS_WIDTH);
     if (!$wc->isNull()) {
       $col_width = $this->get_table_columns_min_widths($context);
       $maxw      = $this->get_table_columns_max_widths($context);
@@ -1009,7 +1009,7 @@ class TableBox extends GenericContainerBox {
     // Calculate width value if it had been set as a percentage
     $this->_calc_percentage_width($parent, $context);
 
-    $wc = $this->get_css_property(CSS_WIDTH);
+    $wc = $this->getCSSProperty(CSS_WIDTH);
     if (!$wc->isNull()) {
       $col_width = $this->get_table_columns_min_widths($context);
       $maxw      = $this->get_table_columns_max_widths($context);
@@ -1043,8 +1043,8 @@ class TableBox extends GenericContainerBox {
 
     // Determine upper-left _content_ corner position of current box 
     // Also see note above regarding margins
-    $border = $this->get_css_property(CSS_BORDER);
-    $padding = $this->get_css_property(CSS_PADDING);
+    $border = $this->getCSSProperty(CSS_BORDER);
+    $padding = $this->getCSSProperty(CSS_PADDING);
 
     $this->put_left($parent->_current_x + 
                     $border->left->get_width() + 
@@ -1063,7 +1063,7 @@ class TableBox extends GenericContainerBox {
     $this->reflow_content($context);
   
     // Update the collapsed margin value with current box bottom margin
-    $margin = $this->get_css_property(CSS_MARGIN);
+    $margin = $this->getCSSProperty(CSS_MARGIN);
 
     $context->pop_collapsed_margin();
     $context->pop_collapsed_margin();

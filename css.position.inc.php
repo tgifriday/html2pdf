@@ -26,11 +26,11 @@ class CSSPosition extends CSSPropertyStringSet {
     return POSITION_STATIC; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_POSITION;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'position';
   }
 }

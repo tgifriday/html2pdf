@@ -12,11 +12,11 @@ class CSSLocalAlign extends CSSPropertyHandler {
 
   function parse($value) { return $value; }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_LOCALALIGN;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-localalign';
   }
 }

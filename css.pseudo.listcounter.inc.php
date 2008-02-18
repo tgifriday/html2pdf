@@ -10,11 +10,11 @@ class CSSPseudoListCounter extends CSSPropertyHandler {
     return 0; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_LIST_COUNTER;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-list-counter';
   }
 

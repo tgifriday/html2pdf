@@ -14,11 +14,11 @@ class CSSCellPadding extends CSSPropertyHandler {
     return Value::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_HTML2PS_CELLPADDING;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return '-html2ps-cellpadding';
   }
 }

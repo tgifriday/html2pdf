@@ -51,11 +51,11 @@ class CSSFontSize extends CSSSubFieldProperty {
     return Value::fromString($value);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_FONT_SIZE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'font-size';
   }
 }

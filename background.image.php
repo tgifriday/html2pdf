@@ -88,7 +88,7 @@ class BackgroundImage {
     };
 
     if ($attachment == BACKGROUND_ATTACHMENT_FIXED &&
-        $box->get_css_property(CSS_DISPLAY) == '-body') {
+        $box->getCSSProperty(CSS_DISPLAY) == '-body') {
       $media =& $driver->get_media();
       $left = $box->get_left_background();
       $right = $box->get_right_background();
@@ -126,8 +126,8 @@ class BackgroundImage {
      * @see pt2pt()
      * @see px2pt()
      */
-    $image_height = px2pt($this->_image->sy());
-    $image_width  = px2pt($this->_image->sx());
+    $image_height = px2pt($this->_image->sx());
+    $image_width  = px2pt($this->_image->sy());
 
     /**
      * Get dimensions of the rectangle to be filled with the background image

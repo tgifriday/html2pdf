@@ -38,11 +38,11 @@ class CSSTextDecoration extends CSSPropertyHandler {
     return $parsed;
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_TEXT_DECORATION;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'text-decoration';
   }
 }

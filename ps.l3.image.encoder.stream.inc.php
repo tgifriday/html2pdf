@@ -8,12 +8,12 @@ class PSL3ImageEncoderStream extends PSImageEncoderStream {
   }
 
   function auto(&$psdata, $src_img, &$size_x, &$size_y, &$tcolor, &$image, &$mask) {
-    if (imagecolortransparent($src_img->get_handle()) == -1) {
-      $id = $this->solid($psdata, $src_img->get_handle(), $size_x, $size_y, $image->get_handle(), $mask);
+    if (imagecolortransparent($src_img) == -1) {
+      $id = $this->solid($psdata, $src_img, $size_x, $size_y, $image, $mask);
       $tcolor = 0;
       return $id;
     } else {
-      $id = $this->transparent($psdata, $src_img->get_handle(), $size_x, $size_y, $image->get_handle(), $mask);
+      $id = $this->transparent($psdata, $src_img, $size_x, $size_y, $image, $mask);
       $tcolor = 1;
 
       return $id;

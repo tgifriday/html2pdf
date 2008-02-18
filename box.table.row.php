@@ -8,7 +8,7 @@ class TableRowBox extends GenericContainerBox {
 
   function &create(&$root, &$pipeline) {
     $box =& new TableRowBox();
-    $box->readCSS($pipeline->get_current_css_state());
+    $box->readCSS($pipeline->getCurrentCSSState());
 
     $child = $root->first_child();
     while ($child) {
@@ -81,7 +81,7 @@ class TableRowBox extends GenericContainerBox {
 
       // Vertical-align cell (do not apply to rowspans)
       if ($cell->rowspan == 1) {
-        $va = $cell->get_css_property(CSS_VERTICAL_ALIGN);
+        $va = $cell->getCSSProperty(CSS_VERTICAL_ALIGN);
         $va_fun = CSSVerticalAlign::value2pdf($va);
         $va_fun->apply_cell($cell, $height, $baseline);
 
@@ -201,7 +201,7 @@ class TableRowBox extends GenericContainerBox {
        */
       
       $cell =& $this->content[$i];
-      $visibility = $cell->get_css_property(CSS_VISIBILITY);
+      $visibility = $cell->getCSSProperty(CSS_VISIBILITY);
 
       if ($visibility === VISIBILITY_VISIBLE) {
         if (is_null($cell->show($viewport))) {

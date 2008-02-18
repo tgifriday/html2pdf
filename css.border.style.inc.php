@@ -15,7 +15,7 @@ class CSSBorderStyle extends CSSSubProperty {
                                            BS_NONE);
   }
 
-  function set_value(&$owner_value, &$value) {
+  function setValue(&$owner_value, &$value) {
     if ($value != CSS_PROPERTY_INHERIT) {
       $owner_value->top->style    = $value->top;
       $owner_value->right->style  = $value->right;
@@ -29,18 +29,18 @@ class CSSBorderStyle extends CSSSubProperty {
     };
   }
 
-  function get_value(&$owner_value) {
+  function getValue(&$owner_value) {
     return new BorderStyle($owner_value->top->style, 
                            $owner_value->right->style, 
                            $owner_value->bottom->style, 
                            $owner_value->left->style);
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_BORDER_STYLE;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'border-style';
   }
 

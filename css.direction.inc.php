@@ -16,11 +16,11 @@ class CSSDirection extends CSSPropertyStringSet {
     return DIRECTION_LTR; 
   }
 
-  function get_property_code() {
+  function getPropertyCode() {
     return CSS_DIRECTION;
   }
 
-  function get_property_name() {
+  function getPropertyName() {
     return 'direction';
   }
 }
