@@ -16,7 +16,7 @@ If you're not using 'configure' call ($g_config is set up manually) you should e
 
 <p>
 To find the exact position of the next page break, script calculates a penalty (a badness, if you prefer) of every possible page break position, and 
-selects one with the minimal penalty value. Possible break positions are horizontal lines between line and block boxes; inside tables they're horizontal row boundaries and horizontal 
+selects one with the minimal penalty value. Possible break positions are horizontal lines between line and block-level boxes; inside tables they're horizontal row boundaries and horizontal 
 lines passing between line boxes in all table cells in a row (thus, if you're using different font sizes or aligments in different cells, there's 
 a big chance there won't be suitable page break places inside this row at all).
 </p>
@@ -45,7 +45,7 @@ Penalty is assigned for the following:
 <td>PAGE_BREAK_WIDOWS_PENALTY</td>
 </tr>
 <tr>
-<td>breaking between line boxes instead of block boxes</td>
+<td>breaking between line boxes instead of block-level boxes</td>
 <td>PAGE_BREAK_LINE_PENALTY</td>
 </tr>
 <tr>

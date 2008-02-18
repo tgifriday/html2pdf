@@ -27,11 +27,11 @@ class CSSHTML2PSHTMLContent extends CSSPropertyHandler {
     return $value_obj;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_HTML2PS_HTML_CONTENT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return '-html2ps-html-content';
   }
 }

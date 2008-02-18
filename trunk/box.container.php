@@ -63,10 +63,6 @@ class GenericContainerBox extends GenericFormattedBox {
    */
   var $_current_y;
 
-  function append_child(&$child) {
-    $this->content[] =& $child;
-  }
-
   function destroy() {
     for ($i=0, $size = count($this->content); $i < $size; $i++) {
       $this->content[$i]->destroy();
@@ -87,7 +83,7 @@ class GenericContainerBox extends GenericFormattedBox {
   function show(&$driver) {
     GenericFormattedBox::show($driver);
 
-    $overflow = $this->getCSSProperty(CSS_OVERFLOW);
+    $overflow = $this->get_css_property(CSS_OVERFLOW);
 
     /**
      * Sometimes the content may overflow container boxes. This situation arise, for example,
@@ -167,7 +163,7 @@ class GenericContainerBox extends GenericFormattedBox {
   function show_fixed(&$driver) {
     GenericFormattedBox::show($driver);
 
-    $overflow = $this->getCSSProperty(CSS_OVERFLOW);
+    $overflow = $this->get_css_property(CSS_OVERFLOW);
 
     /**
      * Sometimes the content may overflow container boxes. This situation arise, for example,
@@ -197,10 +193,10 @@ class GenericContainerBox extends GenericFormattedBox {
        * their show method is called explicitly; the similar check should be performed there
        */
       $child =& $this->content[$i];
-      if ($child->getCSSProperty(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
+      if ($child->get_css_property(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
         // Fixed-positioned blocks are displayed separately;
         // If we call them now, they will be drawn twice
-        if ($child->getCSSProperty(CSS_POSITION) != POSITION_FIXED) {
+        if ($child->get_css_property(CSS_POSITION) != POSITION_FIXED) {
           if (is_null($child->show_fixed($driver))) {
             return null;
           };
@@ -263,6 +259,10 @@ class GenericContainerBox extends GenericFormattedBox {
   }
 
   function add_child(&$box) {
+    $this->append_child($box);
+  }
+
+  function append_child(&$box) {
     // In general, this function is called like following:
     // $box->add_child(create_pdf_box(...))
     // As create_pdf_box _may_ return null value (for example, for an empty text node),
@@ -425,7 +425,7 @@ class GenericContainerBox extends GenericFormattedBox {
   function get_real_full_height() {
     $content_size = count($this->content);
 
-    $overflow = $this->getCSSProperty(CSS_OVERFLOW);
+    $overflow = $this->get_css_property(CSS_OVERFLOW);
 
     // Treat items with overflow: hidden specifically, 
     // as floats flown out of this boxes will not be visible
@@ -460,7 +460,7 @@ class GenericContainerBox extends GenericFormattedBox {
           $min_bottom = min($min_bottom,
                             $this->content[$i]->get_bottom_margin());
         } else {
-          $content_overflow = $this->content[$i]->getCSSProperty(CSS_OVERFLOW);
+          $content_overflow = $this->content[$i]->get_css_property(CSS_OVERFLOW);
 
           if ($content_overflow == OVERFLOW_HIDDEN) {
             $min_bottom = min($min_bottom,
@@ -517,7 +517,7 @@ class GenericContainerBox extends GenericFormattedBox {
     }
 
     if ($this->_first_line) {
-      $ti = $this->getCSSProperty(CSS_TEXT_INDENT);
+      $ti = $this->get_css_property(CSS_TEXT_INDENT);
       $sum += $ti->calculate($this);
       $sum += $this->_additional_text_indent;
     };
@@ -559,8 +559,8 @@ class GenericContainerBox extends GenericFormattedBox {
     /**
      * If we're in 'nowrap' mode, minimal and maximal width will be equal
      */
-    $white_space = $this->getCSSProperty(CSS_WHITE_SPACE);
-    $pseudo_nowrap = $this->getCSSProperty(CSS_HTML2PS_NOWRAP);
+    $white_space = $this->get_css_property(CSS_WHITE_SPACE);
+    $pseudo_nowrap = $this->get_css_property(CSS_HTML2PS_NOWRAP);
     if ($white_space   == WHITESPACE_NOWRAP || 
         $pseudo_nowrap == NOWRAP_NOWRAP) { 
       $min_width = $this->get_min_nowrap_width($context);
@@ -577,7 +577,7 @@ class GenericContainerBox extends GenericFormattedBox {
     };
 
     if ($start_index < $content_size) {
-      $ti = $this->getCSSProperty(CSS_TEXT_INDENT);
+      $ti = $this->get_css_property(CSS_TEXT_INDENT);
       $minw = 
         $ti->calculate($this) + 
         $this->content[$start_index]->get_min_width_natural($context);
@@ -595,7 +595,7 @@ class GenericContainerBox extends GenericFormattedBox {
     /**
      * Apply width constraint to min width. Return maximal value
      */
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     $containing_block =& $this->_get_containing_block();
 
     $min_width = $minw;
@@ -643,12 +643,12 @@ class GenericContainerBox extends GenericFormattedBox {
     //
     if ($size > 0) {
       if (is_inline($this->_line[0])) {
-        $cb = CSSTextAlign::value2pdf($this->getCSSProperty(CSS_TEXT_ALIGN));
+        $cb = CSSTextAlign::value2pdf($this->get_css_property(CSS_TEXT_ALIGN));
         $cb($this, $context, $lastline);
       } else {
         // Nevertheless, CENTER tag and P/DIV with ALIGN attribute set should affect the 
         // position of non-inline children.
-        $cb = CSSPseudoAlign::value2pdf($this->getCSSProperty(CSS_HTML2PS_ALIGN));
+        $cb = CSSPseudoAlign::value2pdf($this->get_css_property(CSS_HTML2PS_ALIGN));
         $cb($this, $context, $lastline);
       };
     };
@@ -662,7 +662,7 @@ class GenericContainerBox extends GenericFormattedBox {
     $baseline = 0;
     $height = 0;
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
 
       if ($vertical_align == VA_BASELINE) {
         // Add current baseline-aligned item to the baseline
@@ -687,7 +687,7 @@ class GenericContainerBox extends GenericFormattedBox {
     // SUB vertical align
     //
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_SUB) {
         $this->_line[$i]->baseline = 
           $baseline + $this->_line[$i]->get_full_height()/2;
@@ -697,7 +697,7 @@ class GenericContainerBox extends GenericFormattedBox {
     // SUPER vertical align
     //
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_SUPER) {
         $this->_line[$i]->baseline = $this->_line[$i]->get_full_height()/2;
       };
@@ -707,7 +707,7 @@ class GenericContainerBox extends GenericFormattedBox {
     //
     $middle = 0;
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_MIDDLE) {
         $middle = max($middle, $this->_line[$i]->get_full_height() / 2);
       };
@@ -723,7 +723,7 @@ class GenericContainerBox extends GenericFormattedBox {
     };
  
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_MIDDLE) {
         $this->_line[$i]->baseline = $this->_line[$i]->default_baseline + ($height/2 - $this->_line[$i]->get_full_height()/2);
       };
@@ -733,7 +733,7 @@ class GenericContainerBox extends GenericFormattedBox {
     //
     $bottom = 0;
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_BOTTOM) {
         $bottom = max($bottom, $this->_line[$i]->get_full_height());
       };
@@ -749,7 +749,7 @@ class GenericContainerBox extends GenericFormattedBox {
     };
 
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_BOTTOM) {
         $this->_line[$i]->baseline = $this->_line[$i]->default_baseline + $height - $this->_line[$i]->get_full_height();
       };
@@ -759,7 +759,7 @@ class GenericContainerBox extends GenericFormattedBox {
     //
     $bottom = 0;
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_TOP) {
         $bottom = max($bottom, $this->_line[$i]->get_full_height());
       };
@@ -770,7 +770,7 @@ class GenericContainerBox extends GenericFormattedBox {
     };
 
     for ($i=0; $i < $size; $i++) {
-      $vertical_align = $this->_line[$i]->getCSSProperty(CSS_VERTICAL_ALIGN);
+      $vertical_align = $this->_line[$i]->get_css_property(CSS_VERTICAL_ALIGN);
       if ($vertical_align == VA_TOP) {
         $this->_line[$i]->baseline = $this->_line[$i]->default_baseline;
       };
@@ -790,7 +790,8 @@ class GenericContainerBox extends GenericFormattedBox {
 
       $effective_bottom = 
         $line_element->get_top() - 
-        $line_element->get_height();
+        $line_element->get_height() - 
+        $line_element->get_extra_bottom();
 
       $this->extend_height($effective_bottom);
       $line_bottom = min($effective_bottom, $line_bottom);
@@ -863,7 +864,7 @@ class GenericContainerBox extends GenericFormattedBox {
   }
 
   function reflow_content(&$context) {
-    $text_indent = $this->getCSSProperty(CSS_TEXT_INDENT);
+    $text_indent = $this->get_css_property(CSS_TEXT_INDENT);
 
     $this->close_line($context);
 
@@ -937,7 +938,7 @@ class GenericContainerBox extends GenericFormattedBox {
     $y = $this->apply_clear($parent->_current_y, $context);
 
     // determine the position of top-left floating box corner
-    if ($this->getCSSProperty(CSS_FLOAT) === FLOAT_RIGHT) {
+    if ($this->get_css_property(CSS_FLOAT) === FLOAT_RIGHT) {
       $context->float_right_xy($parent, $this->get_full_width(), $x, $y);
       $x -= $this->get_full_width();
     } else {
@@ -1077,7 +1078,7 @@ class GenericContainerBox extends GenericFormattedBox {
       $this->parent->_setupClip($driver);
     };
 
-    $overflow = $this->getCSSProperty(CSS_OVERFLOW);
+    $overflow = $this->get_css_property(CSS_OVERFLOW);
     if ($overflow !== OVERFLOW_VISIBLE && !$GLOBALS['g_config']['debugnoclip']) {
       $driver->moveto( $this->get_left_border() , $this->get_top_border());
       $driver->lineto( $this->get_right_border(), $this->get_top_border());

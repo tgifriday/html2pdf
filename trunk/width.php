@@ -81,7 +81,7 @@ class WCFraction extends WidthConstraint {
 
   function applicable(&$box) {
     if (is_null($box->parent)) { return false; };
-    $parent_wc = $box->parent->getCSSProperty(CSS_WIDTH);
+    $parent_wc = $box->parent->get_css_property(CSS_WIDTH);
     return $box->isCell() || $parent_wc->applicable($box->parent);
   }
 

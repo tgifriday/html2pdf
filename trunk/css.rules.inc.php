@@ -10,32 +10,32 @@ class CSSRule {
   var $specificity;
   var $pseudoelement;
 
+  function CSSRule($selector, $body, $baseurl, $order) {
+    $this->selector = $selector;
+    $this->body =& $body;
+    $this->baseurl = $baseurl;
+    $this->order = $order;
+
+    $this->specificity = css_selector_specificity($this->selector);
+    $this->pseudoelement = css_find_pseudoelement($this->selector);
+  }
+
   function apply(&$root, &$state, &$pipeline) {
     $pipeline->push_base_url($this->baseurl);
     $this->body->apply($state);
     $pipeline->pop_base_url();
   }
 
-  function addProperty($property) {
-    $this->body->addProperty($property);
+  function add_property($property) {
+    $this->body->add_property($property);
   }
 
-  function CSSRule($rule, &$pipeline) {
-    $this->selector = $rule[0];
-    $this->body     = $rule[1]->copy();
-    $this->baseurl  = $rule[2];
-    $this->order    = $rule[3];
-
-    $this->specificity   = css_selector_specificity($this->selector);
-    $this->pseudoelement = css_find_pseudoelement($this->selector);
+  function set_property($key, $value, &$pipeline) {
+    $this->body->set_property_value($key, $value);
   }
 
-  function setProperty($key, $value, &$pipeline) {
-    $this->body->setPropertyValue($key, $value);
-  }
-
-  function &getProperty($key) {
-    return $this->body->getPropertyValue($key);
+  function &get_property($key) {
+    return $this->body->get_property_value($key);
   }
 
   function get_order() { return $this->order; }

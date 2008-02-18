@@ -12,11 +12,11 @@ define('BG_POSITION_SUBVALUE_TYPE_HORZ',1);
 define('BG_POSITION_SUBVALUE_TYPE_VERT',2);
 
 class CSSBackgroundPosition extends CSSSubFieldProperty {
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BACKGROUND_POSITION;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'background-position';
   }
 

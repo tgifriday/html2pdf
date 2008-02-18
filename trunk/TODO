@@ -1,3 +1,5 @@
+www.allaboturns.com
+update FetcherLocalFile so that it returns correct base url
 Page breaking "watermark" for non-top-aligned cells
 www.test.de
 www.gmx.de
@@ -22,3 +24,5 @@ Missing zlib FPDF font generation error
 Systemcheck script checks for CURL in safe_mode (CURLOPT_FOLLOWLOCATION does not work there)
 'caption' support
 Rendering several pages on one page
+support for 'counter' for non margin-box elements
+Setting starting page number explicitly (replacing default value of 1)

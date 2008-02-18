@@ -10,6 +10,8 @@ class AutofixUrl {
       return null;
     };
 
+    $path = isset($parts['path']) ? $parts['path'] : '/';
+
     /*
      * Check if path contains only RFC1738 compliant symbols and fix it
      * No graphic: 00-1F, 7F, 80-FF
@@ -18,16 +20,16 @@ class AutofixUrl {
      *
      * Normally, slash is allowed in path part, and % may be a part of encoded character
      */
-    $no_graphic_found = preg_match('/[\x00-\x1F\x7F\x80-\xFF]/', $parts['path']);
-    $unsafe_found = preg_match('/[ <>\"#{}\|\^~\[\]`]/', $parts['path']);
-    $unsafe_percent_found = preg_match('/%[^\dA-F]|%\d[^\dA-F]/i', $parts['path']);
-    $reserved_found = preg_match('/;\?:@=&/', $parts['path']);
+    $no_graphic_found = preg_match('/[\x00-\x1F\x7F\x80-\xFF]/', $path);
+    $unsafe_found = preg_match('/[ <>\"#{}\|\^~\[\]`]/', $path);
+    $unsafe_percent_found = preg_match('/%[^\dA-F]|%\d[^\dA-F]/i', $path);
+    $reserved_found = preg_match('/;\?:@=&/', $path);
 
     if ($no_graphic_found || 
         $unsafe_found || 
         $unsafe_percent_found || 
         $reserved_found) {
-      $parts['path'] = join('/', array_map('rawurlencode', explode('/',$parts['path'])));
+      $path = join('/', array_map('rawurlencode', explode('/',$path)));
     };
 
     // Build updated URL
@@ -56,9 +58,7 @@ class AutofixUrl {
       };
     };
     
-    if (isset($parts['path'])) {
-      $url_fixed .= $parts['path'];
-    };
+    $url_fixed .= $path;
    
     if (isset($parts['query'])) {
       $url_fixed .= '?';

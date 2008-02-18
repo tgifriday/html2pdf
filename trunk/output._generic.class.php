@@ -226,7 +226,7 @@ class OutputDriverGeneric extends OutputDriver {
       // Fallback to some stupid algorithm of filename generation
       $tries = 0;
       do {
-        $filename = WRITER_TEMPDIR.'/'.WRITER_FILE_PREFIX.md5(uniqid(rand(), true));
+        $filename = WRITER_TEMPDIR.DIRECTORY_SEPARATOR.WRITER_FILE_PREFIX.md5(uniqid(rand(), true));
         // Note: "x"-mode prevents us from re-using existing files
         // But it require PHP 4.3.2 or later
         $filehandle = @fopen($filename, "xb");

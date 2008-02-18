@@ -1,7 +1,7 @@
 <?php
 class BoxTextFieldPageNo extends TextBoxString {
   function BoxTextFieldPageNo() {
-    $this->TextBoxString("", "iso-8859-1");
+    $this->TextBoxString('', 'iso-8859-1');
   }
 
   function from_box(&$box) {
@@ -9,8 +9,8 @@ class BoxTextFieldPageNo extends TextBoxString {
 
     $field->copy_style($box);
 
-    $field->words = array("000");
-    $field->encodings = array("iso-8859-1");
+    $field->words = array('000');
+    $field->encodings = array('iso-8859-1');
     $field->_left      = $box->_left;
     $field->_top       = $box->_top;
     $field->baseline   = $box->baseline;
@@ -19,7 +19,7 @@ class BoxTextFieldPageNo extends TextBoxString {
   }
 
   function show(&$viewport) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf('%d', $viewport->current_page);
 
@@ -49,7 +49,7 @@ class BoxTextFieldPageNo extends TextBoxString {
   }
 
   function show_fixed(&$driver) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf('%d', $driver->current_page);
 

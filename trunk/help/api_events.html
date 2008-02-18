@@ -64,6 +64,11 @@ A single parameter is passed to the callback function: an associative array cont
 <td>pipeline: reference to current pipeline object</td>
 </tr>
 <tr>
+<td class="event-name">after-batch-item</td>
+<td>after current batch item was processed, rendered and removed from the memory</td>
+<td>pipeline: reference to current pipeline object</td>
+</tr>
+<tr>
 <td class="event-name">after-document</td>
 <td>after all pages in a current document were rendered</td>
 <td>pipeline: reference to current pipeline object; document: reference to the body box object</td>
@@ -74,8 +79,18 @@ A single parameter is passed to the callback function: an associative array cont
 <td>pipeline: reference to current pipeline object; document: reference to the body box object; pageno: current page number (1-based)</td>
 </tr>
 <tr>
+<td class="event-name">after-parse</td>
+<td>Called immediately after XML parser but before any tree filters</td>
+<td>pipeline: reference to current pipeline object; document: reference to the body box object; media: reference the current output media object.</td>
+</tr>
+<tr>
 <td class="event-name">before-batch</td>
 <td>before new document batch starts rendering</td>
+<td>pipeline: reference to current pipeline object</td>
+</tr>
+<tr>
+<td class="event-name">before-batch-item</td>
+<td>just before current batch item is fetched</td>
 <td>pipeline: reference to current pipeline object</td>
 </tr>
 <tr>
@@ -87,6 +102,11 @@ A single parameter is passed to the callback function: an associative array cont
 <td class="event-name">before-page</td>
 <td>after new blank page is added to the PDF document but before any elements are rendered</td>
 <td>pipeline: reference to current pipeline object; document: reference to the body box object; pageno: current page number (1-based)</td>
+</tr>
+<tr>
+<td class="event-name">before-page-heights</td>
+<td>after content has been laid out, just before running the page breaking algorithm</td>
+<td>pipeline: reference to current pipeline object; document: reference to the body box object; media: reference the current output media object.</td>
 </tr>
 </tbody>
 </table>

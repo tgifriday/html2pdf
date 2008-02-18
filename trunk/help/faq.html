@@ -112,7 +112,6 @@ Using PHP from the command line</a>
 regexp usage; it is recommended to increase pcre.backtrack_limit value to 1000000. 
 </dd>
 
-<dl>
 <dt id="nooutput-php442">HTML2PS returns blank page. There's some strange messages in PHP error log, for example:
 <pre>
 Parent: child process exited with status 3221225477 -- Restarting.
@@ -124,12 +123,13 @@ I would recommend either downgrading to earlier 4.4.x versions or installing PHP
 </dd>
 
 <dt id="nooutput-memory">All I'm getting is a blank page; no error messages in PHP error log. Whats happened?</dt>
-  <dd>The script is probably running out of memory or execution time. Try increasing 
-    the values of <code>max_execution_time</code> and/or <code>memory_limit</code> PHP configuration variables. 
-    Recommended values are <strong>120</strong> seconds and <strong>32</strong> megabytes. Nevertheless, if you're 
-    using <em>VERY</em> big images, you'll probably need to increase these values 
-    even more.</dd>
-
+<dd>
+The script is probably running out of memory or execution time. Try increasing 
+the values of <code>max_execution_time</code> and/or <code>memory_limit</code> PHP configuration variables. 
+Recommended values are <strong>120</strong> seconds and <strong>32</strong> megabytes. Nevertheless, if you're 
+using <em>VERY</em> big images, you'll probably need to increase these values 
+even more.
+</dd>
 <dd>
 Another cause may be a JavaScript or META redirect on page you're trying to convert. As HTML2PS script is not designed 
 as interactive user agent, it will not follow such redirects for you. You may try to open the url in question in your browser
@@ -141,6 +141,10 @@ domain.com (without 'www' part) may just ignore HTTP requests. On the other side
 URL; for example, when you enter 'something' to the address bar, they may try to get something.com or www.something.com. 
 This may lead to problem similar to one described in previous paragraph; the solution is the same: open URL in browser and
 check it will change.
+</dd>
+<dd>
+Yet another cause may be browser built-in timeout; in particular, Safari for Windows has a built-in timeout of 60 seconds. In this case
+you will not be able to get the PDF file if conversion takes more than a minute.
 </dd>
 
 <dt id="nooutput-memory2">I got the following error message: <tt>Fatal error: Allowed memory size of &hellip; bytes exhausted (tried to allocate &hellip; bytes) in&hellip</tt></dt>
@@ -401,7 +405,7 @@ pointing to non-rendered part, this hyperlink will be disabled, as it points to 
 <dd>Yes. By default HTML2PS embeds fonts used during conversion in the generated PDF. You may disable this option by 
 setting 'embed' attribute to '0' for these fonts in html2ps.config. Note that it will probably cause problems 
 with national symbols on older versions of Acrobat Reader; also, this assumes that users have all fonts used in PDF 
-files on their machines.</dd>
+files on their machines. Also, refer to the description of <a href="configuration.html#font_embedding_mode">FONT_EMBEDDING_MODE</a> configuration constant.</dd>
 
 <dt>Is it possible to use a custom file name when outputting the pdf file? As of right now, the filename is long ugly string and doesn't look very clean.
 Can I pass the script a varible such as &amp;saveas=thispdffile.pdf and use that for the file name when saving in the browser?</dt>

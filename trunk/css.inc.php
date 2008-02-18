@@ -105,7 +105,7 @@ class CSS {
     };
   }
 
-  function _word2code($key) {
+  function _name2code($key) {
     if (!isset($this->_mapping[$key])) { 
       return null; 
     };
@@ -113,14 +113,14 @@ class CSS {
     return $this->_mapping[$key];
   }
 
-  function word2code($key) {
+  function name2code($key) {
     $css =& CSS::get();
-    return $css->_word2code($key);
+    return $css->_name2code($key);
   }
 
   function register_css_property(&$handler) {
-    $property = $handler->getPropertyCode();
-    $name     = $handler->getPropertyName();
+    $property = $handler->get_property_code();
+    $name     = $handler->get_property_name();
 
     $css =& CSS::get();
     $css->_handlers[$property] =& $handler;
@@ -151,7 +151,7 @@ class CSS {
     if (preg_match(sprintf('/^(%s)\s*(.*)$/s', CSS_STRING1_REGEXP), $string, $matches)) {
       $value = $matches[1];
       $rest = $matches[2];
-      
+     
       $value = CSS::remove_backslash_at_newline($value);
 
       return array($value, $rest);

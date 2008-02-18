@@ -11,8 +11,7 @@ class TextInputBox extends InlineControlBox {
   var $_value;
 
   function TextInputBox($value, $name) {
-    // Call parent constructor
-    $this->InlineBox();
+    $this->InlineControlBox();
 
     $this->_value = $value;
     $this->_field_name = $name;
@@ -21,9 +20,9 @@ class TextInputBox extends InlineControlBox {
   function &create(&$root, &$pipeline) {
     // Text to be displayed
     if ($root->has_attribute('value')) {
-      $text = trim($root->get_attribute("value"));
+      $text = trim($root->get_attribute('value'));
     } else {
-      $text = "";
+      $text = '';
     };
 
     /**
@@ -32,21 +31,8 @@ class TextInputBox extends InlineControlBox {
     $name = $root->get_attribute('name');
 
     $box =& new TextInputBox($root->get_attribute("value"), $name);
-    $box->readCSS($pipeline->getCurrentCSSState());
-
-    /**
-     * Contents of the text box are somewhat similar to the inline box: 
-     * a sequence of the text and whitespace boxes; we generate this sequence using
-     * the InlineBox, then copy contents of the created inline box to our button.
-     *
-     * @todo probably, create_from_text() function should be extracted to the common parent 
-     * of inline boxes.
-     */
-    $ibox = InlineBox::create_from_text($text, WHITESPACE_PRE, $pipeline);
-
-    for ($i=0, $size = count($ibox->content); $i<$size; $i++) {
-      $box->add_child($ibox->content[$i]);
-    };
+    $box->readCSS($pipeline->get_current_css_state());
+    $box->setup_content($text, $pipeline);
 
     return $box;
   }

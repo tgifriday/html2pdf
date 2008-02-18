@@ -63,7 +63,7 @@ class FlowContext {
       $float =& $floats[$i];
 
       // Process only left-floating boxes
-      if ($float->getCSSProperty(CSS_FLOAT) == FLOAT_LEFT) {
+      if ($float->get_css_property(CSS_FLOAT) == FLOAT_LEFT) {
         // Check if this float contains given Y-coordinate
         //
         // Note that top margin coordinate is inclusive but 
@@ -123,7 +123,7 @@ class FlowContext {
       // OR if there's no parent boxes with constrained width (it will expanded in this case anyway)
 
       // small value to hide the rounding errors
-      $parent_wc = $parent->getCSSProperty(CSS_WIDTH);
+      $parent_wc = $parent->get_css_property(CSS_WIDTH);
       if ($parent->get_right() + EPSILON >= $x + $width ||
           $parent->mayBeExpanded()) {
 
@@ -187,7 +187,7 @@ class FlowContext {
       $float =& $floats[$i];
 
       // Process only right-floating boxes
-      if ($float->getCSSProperty(CSS_FLOAT) == FLOAT_RIGHT) {
+      if ($float->get_css_property(CSS_FLOAT) == FLOAT_RIGHT) {
         // Check if this float contains given Y-coordinate
         //
         // Note that top margin coordinate is inclusive but 
@@ -352,8 +352,8 @@ class FlowContext {
 }
 
 function cmp_boxes_by_z_index($a, $b) {
-  $a_z = $a->getCSSProperty(CSS_Z_INDEX);
-  $b_z = $b->getCSSProperty(CSS_Z_INDEX);
+  $a_z = $a->get_css_property(CSS_Z_INDEX);
+  $b_z = $b->get_css_property(CSS_Z_INDEX);
 
   if ($a_z == $b_z) return 0;
   return ($a_z < $b_z) ? -1 : 1;

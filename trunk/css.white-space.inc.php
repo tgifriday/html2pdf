@@ -22,11 +22,11 @@ class CSSWhiteSpace extends CSSPropertyStringSet {
     return WHITESPACE_NORMAL; 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_WHITE_SPACE;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'white-space';
   }
 }

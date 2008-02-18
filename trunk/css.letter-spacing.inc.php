@@ -28,11 +28,11 @@ class CSSLetterSpacing extends CSSPropertyHandler {
     return Value::fromString($value);
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_LETTER_SPACING;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'letter-spacing';
   }
 }

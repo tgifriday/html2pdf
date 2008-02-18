@@ -19,11 +19,11 @@ class CSSOverflow extends CSSPropertyStringSet {
     return OVERFLOW_VISIBLE; 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_OVERFLOW;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'overflow';
   }
 }

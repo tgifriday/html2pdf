@@ -11,11 +11,19 @@ class CSSPropertyDeclaration {
     $this->_important = false;
   }
 
-  function &getValue() {
+  function &get_value() {
     return $this->_value;
   }
 
-  function setValue(&$value) {
+  function set_code($code) {
+    $this->_code = $code;
+  }
+
+  function set_important($value) {
+    $this->_important = $value;
+  }
+
+  function set_value(&$value) {
     $this->_value =& $value;
   }
 
@@ -40,7 +48,7 @@ class CSSPropertyDeclaration {
     return $declaration;
   }
 
-  function getCode() {
+  function get_code() {
     return $this->_code;
   }
 
@@ -58,8 +66,8 @@ class CSSPropertyDeclaration {
 
     return $declaration;
   }
-  
-  function isImportant() {
+
+  function is_important() {
     return $this->_important;
   }
 }

@@ -4,7 +4,7 @@
 class LegendBox extends GenericContainerBox {
   function &create(&$root, &$pipeline) {
     $box = new LegendBox($root);
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     $box->create_content($root, $pipeline);
 
     return $box;

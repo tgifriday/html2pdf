@@ -2,11 +2,11 @@
 // $Header: /cvsroot/html2ps/css.border.left.inc.php,v 1.1 2006/09/07 18:38:13 Konstantin Exp $
 
 class CSSBorderLeft extends CSSSubFieldProperty {
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BORDER_LEFT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'border-left';
   }
 

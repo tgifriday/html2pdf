@@ -280,7 +280,7 @@ div.comment {
 <option value="handheld">Handheld</option>
 <option value="print">Print</option>
 <option value="projection">Projection</option>
-<option value="screen" selected="selected">Screen</option>
+<option value="Screen" selected="selected">Screen</option>
 <option value="tty">TTY</option>
 <option value="tv">TV</option>
 </select>
