@@ -331,6 +331,7 @@ class Pipeline {
 
     $this->_dispatcher =& new Dispatcher();
 
+    $this->_dispatcher->add_event('after-driver-init');
     $this->_dispatcher->add_event('before-page-heights');
     $this->_dispatcher->add_event('before-page');
     $this->_dispatcher->add_event('after-page');
@@ -1127,6 +1128,10 @@ class Pipeline {
     $this->_setupScales($media);
     $GLOBALS['g_media'] =& $media;
     $this->output_driver->reset($media);
+
+    $this->_dispatcher->fire('after-driver-init', 
+                             array('pipeline' => &$this,
+                                   'media' => &$media));
   }
 
   function reset_css() {
