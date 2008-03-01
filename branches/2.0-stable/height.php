@@ -135,7 +135,7 @@ class HCConstraint {
 
   function &create(&$box) {   
     // Determine if there's constant restriction
-    $value = $box->getCSSProperty(CSS_HEIGHT);
+    $value = $box->get_css_property(CSS_HEIGHT);
 
     if ($value->isAuto($value)) {
       $constant = null;
@@ -146,7 +146,7 @@ class HCConstraint {
     };
 
     // Determine if there's min restriction
-    $value = $box->getCSSProperty(CSS_MIN_HEIGHT);
+    $value = $box->get_css_property(CSS_MIN_HEIGHT);
     if ($value->isAuto($value)) {
       $min = null;
     } elseif ($value->isPercentage()) {
@@ -156,7 +156,7 @@ class HCConstraint {
     };
 
     // Determine if there's max restriction
-    $value = $box->getCSSProperty(CSS_MAX_HEIGHT);
+    $value = $box->get_css_property(CSS_MAX_HEIGHT);
     if ($value->isAuto($value)) {
       $max = null;
     } elseif ($value->isPercentage()) {

@@ -25,7 +25,7 @@ class FormBox extends BlockBox {
     };
 
     $box = new FormBox($name);
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     $box->create_content($root, $pipeline);
     return $box;
   }

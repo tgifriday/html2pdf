@@ -21,11 +21,11 @@ class CSSLeft extends CSSPropertyHandler {
     return ValueLeft::fromString($value);
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_LEFT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'left';
   }
 }

@@ -15,7 +15,7 @@ class CSSMargin extends CSSPropertyHandler {
   }
 
   function parse_in($value) {
-    $values = explode(" ",trim($value));
+    $values = preg_split('/\s+/', trim($value));
 
     switch (count($values)) {
     case 1:
@@ -51,11 +51,11 @@ class CSSMargin extends CSSPropertyHandler {
     return $value;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MARGIN;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'margin';
   }
 }
@@ -66,11 +66,11 @@ class CSSMarginTop extends CSSSubFieldProperty {
     return MarginSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MARGIN_TOP;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'margin-top';
   }
 }
@@ -81,11 +81,11 @@ class CSSMarginRight extends CSSSubFieldProperty {
     return MarginSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MARGIN_RIGHT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'margin-right';
   }
 }
@@ -96,11 +96,11 @@ class CSSMarginLeft extends CSSSubFieldProperty {
     return MarginSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MARGIN_LEFT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'margin-left';
   }
 }
@@ -111,11 +111,11 @@ class CSSMarginBottom extends CSSSubFieldProperty {
     return MarginSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MARGIN_BOTTOM;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'margin-bottom';
   }
 }

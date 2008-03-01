@@ -16,8 +16,8 @@ class CSSRule {
     $pipeline->pop_base_url();
   }
 
-  function addProperty($property) {
-    $this->body->addProperty($property);
+  function add_property($property) {
+    $this->body->add_property($property);
   }
 
   function CSSRule($rule, &$pipeline) {
@@ -30,12 +30,12 @@ class CSSRule {
     $this->pseudoelement = css_find_pseudoelement($this->selector);
   }
 
-  function setProperty($key, $value, &$pipeline) {
-    $this->body->setPropertyValue($key, $value);
+  function set_property($key, $value, &$pipeline) {
+    $this->body->set_property_value($key, $value);
   }
 
-  function &getProperty($key) {
-    return $this->body->getPropertyValue($key);
+  function &get_property($key) {
+    return $this->body->get_property_value($key);
   }
 
   function get_order() { return $this->order; }

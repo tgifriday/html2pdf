@@ -95,7 +95,7 @@ class GenericImgBox extends GenericInlineBox {
 
     $font_resolver =& $driver->get_font_resolver();
 
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
     $typeface = $font_resolver->getTypefaceName($font->family, 
                                                 $font->weight, 
                                                 $font->style, 
@@ -135,7 +135,7 @@ class GenericImgBox extends GenericInlineBox {
       /**
        * Setup box size
        */
-      $font = $this->getCSSProperty(CSS_FONT_SIZE);
+      $font = $this->get_css_property(CSS_FONT_SIZE);
       $font_size       = $font->getPoints();
 
       $this->ascender         = $ascender  * $font_size;
@@ -265,7 +265,7 @@ class ImgBox extends GenericImgBox {
 
       $box =& new BrokenImgBox($width, $height, $alt);
 
-      $box->readCSS($pipeline->getCurrentCSSState());
+      $box->readCSS($pipeline->get_current_css_state());
 
       $box->put_width($width);
       $box->put_height($height);
@@ -278,7 +278,7 @@ class ImgBox extends GenericImgBox {
       return $box;
     } else {
       $box =& new ImgBox($src_img);
-      $box->readCSS($pipeline->getCurrentCSSState());
+      $box->readCSS($pipeline->get_current_css_state());
       $box->_setupSize();
      
       return $box;
@@ -293,7 +293,7 @@ class ImgBox extends GenericImgBox {
     $this->src_height = $this->image->sx();
     $this->src_width  = $this->image->sy();
 
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     $hc = $this->get_height_constraint();
 
     // Proportional scaling 
@@ -339,7 +339,8 @@ class ImgBox extends GenericImgBox {
 
     $driver->image_scaled($this->image, 
                           $this->get_left(), $this->get_bottom(),
-                          $this->get_width() / $this->image->sx(), $this->get_height() / $this->image->sy());
+                          $this->get_width() / $this->image->sx(), 
+                          $this->get_height() / $this->image->sy());
 
     $strategy =& new StrategyLinkRenderingNormal();
     $strategy->apply($this, $driver);

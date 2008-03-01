@@ -56,11 +56,11 @@ class CSSPseudoAlign extends CSSPropertyHandler {
     }
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_HTML2PS_ALIGN;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return '-html2ps-align';
   }
 }

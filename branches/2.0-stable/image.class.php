@@ -37,10 +37,18 @@ class Image {
   }
 
   function sx() {
+    if (!$this->_handle) {
+      return 0;
+    };
+
     return imagesx($this->_handle);
   }
 
   function sy() {
+    if (!$this->_handle) {
+      return 0;
+    };
+
     return imagesy($this->_handle);
   }
 }
@@ -91,9 +99,13 @@ class ImageFactory {
     // register it in the cached objects array
     //
     $handle = do_image_open($filename, $type);
-    $g_image_cache[$url] =& new Image($handle,
-                                      $filename,
-                                      $type);
+    if ($handle) {
+      $g_image_cache[$url] =& new Image($handle,
+                                        $filename,
+                                        $type);
+    } else {
+      $g_image_cache[$url] = null;
+    };
     // return image
     //
     // return do_image_open($filename);
@@ -154,7 +166,9 @@ class ImageFactory {
   //
   function clear_cache() {
     foreach ($GLOBALS['g_image_cache'] as $key => $value) {
-      unlink($value->get_filename());
+      if (!is_null($value)) {
+        unlink($value->get_filename());
+      };
     };
     $g_image_cache = array();
   }

@@ -307,7 +307,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
       $result = dl(PDFLIB_DL_PATH);
 
       if (!$result) {
-        readfile(HTML2PS_DIR.'/templates/missing_pdflib.html');
+        readfile(HTML2PS_DIR.'templates/missing_pdflib.html');
         error_log("No PDFLIB extension found");
         die("HTML2PS Error");
       }

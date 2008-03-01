@@ -6,11 +6,11 @@ class CSSMinWidth extends CSSSubFieldProperty {
     $this->CSSSubFieldProperty($owner, $field);
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_MIN_WIDTH;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'min-width';
   }
 

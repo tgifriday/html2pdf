@@ -5,7 +5,7 @@ class CSSPropertyHandler {
   var $_inheritable_text;
 
   function css($value, &$pipeline) { 
-    $css_state =& $pipeline->getCurrentCSSState();
+    $css_state =& $pipeline->get_current_css_state();
 
     if ($this->applicable($css_state)) {
       $this->replace($this->parse($value, $pipeline), $css_state); 
@@ -17,7 +17,7 @@ class CSSPropertyHandler {
   }
 
   function clearDefaultFlags(&$state) {
-    $state->setPropertyDefaultFlag($this->getPropertyCode(), false);
+    $state->set_propertyDefaultFlag($this->get_property_code(), false);
   }
 
   function CSSPropertyHandler($inheritable, $inheritable_text) { 
@@ -27,14 +27,14 @@ class CSSPropertyHandler {
 
   /**
    * Optimization: this function is called very often, so 
-   * we minimize the overhead by calling $this->getPropertyCode()
+   * we minimize the overhead by calling $this->get_property_code()
    * once per property handler object instead of calling in every
    * CSSPropertyHandler::get() call.
    */
   function &get(&$state) { 
     static $property_code = null;
     if (is_null($property_code)) {
-      $property_code = $this->getPropertyCode();
+      $property_code = $this->get_property_code();
     };
 
     if (!isset($state[$property_code])) {
@@ -46,7 +46,7 @@ class CSSPropertyHandler {
   }
 
   function inherit($old_state, &$new_state) { 
-    $code = $this->getPropertyCode();
+    $code = $this->get_property_code();
     $new_state[$code] = ($this->_inheritable ? 
                          $old_state[$code] : 
                          $this->default_value());
@@ -61,7 +61,7 @@ class CSSPropertyHandler {
   }
 
   function inherit_text($old_state, &$new_state) { 
-    $code = $this->getPropertyCode();
+    $code = $this->get_property_code();
 
     if ($this->_inheritable_text) {
       $new_state[$code] = $old_state[$code];
@@ -81,17 +81,17 @@ class CSSPropertyHandler {
   function is_subproperty() { return false; }
 
   function replace($value, &$state) { 
-    $state->setProperty($this->getPropertyCode(), $value);
+    $state->set_property($this->get_property_code(), $value);
   }
 
   function replaceDefault($value, &$state) { 
-    $state->setPropertyDefault($this->getPropertyCode(), $value);
+    $state->set_propertyDefault($this->get_property_code(), $value);
   }
 
   function replace_array($value, &$state) {
     static $property_code = null;
     if (is_null($property_code)) {
-      $property_code = $this->getPropertyCode();
+      $property_code = $this->get_property_code();
     };
 
     $state[$property_code] = $value;

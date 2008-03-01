@@ -19,7 +19,7 @@ class BoxTextFieldPageNo extends TextBoxString {
   }
 
   function show(&$viewport) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf('%d', $viewport->current_page);
 
@@ -49,7 +49,7 @@ class BoxTextFieldPageNo extends TextBoxString {
   }
 
   function show_fixed(&$driver) {
-    $font = $this->getCSSProperty(CSS_FONT);
+    $font = $this->get_css_property(CSS_FONT);
 
     $this->words[0] = sprintf('%d', $driver->current_page);
 

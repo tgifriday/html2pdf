@@ -17,11 +17,11 @@ class CSSBorderCollapse extends CSSPropertyStringSet {
     return BORDER_SEPARATE; 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BORDER_COLLAPSE;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'border-collapse';
   }
 }

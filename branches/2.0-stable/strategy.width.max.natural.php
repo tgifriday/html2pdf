@@ -25,7 +25,7 @@ class StrategyWidthMaxNatural {
     $this->_maxw = 0;
 
     // We need to add text indent to the max width
-    $text_indent = $box->getCSSProperty(CSS_TEXT_INDENT);
+    $text_indent = $box->get_css_property(CSS_TEXT_INDENT);
     $this->_cmaxw = $text_indent->calculate($box);
     
     for ($i=0, $size = count($box->content); $i<$size; $i++) {
@@ -40,8 +40,8 @@ class StrategyWidthMaxNatural {
         if (is_inline($child)) {
           $this->add_width($child->get_max_width_natural($context, $this->_limit));
 
-        } elseif ($child->getCSSProperty(CSS_FLOAT) !== FLOAT_NONE) {
-          $wc = $child->getCSSProperty(CSS_WIDTH);
+        } elseif ($child->get_css_property(CSS_FLOAT) !== FLOAT_NONE) {
+          $wc = $child->get_css_property(CSS_WIDTH);
 
           if (!$wc->isFraction()) {
             $delta = $child->get_max_width($context, $this->_limit);
@@ -56,7 +56,7 @@ class StrategyWidthMaxNatural {
           
           // Process special case with percentage constrained table
           $item = $child;
-          $item_wc = $item->getCSSProperty(CSS_WIDTH);
+          $item_wc = $item->get_css_property(CSS_WIDTH);
           
           if (is_a($item, "TableBox") &&
               $item_wc->isFraction()) {

@@ -13,7 +13,7 @@ class CSSPadding extends CSSPropertyHandler {
   function default_value() { return $this->default_value->copy(); }
 
   function parse_in($value) {
-    $values = explode(" ",trim($value));
+    $values = preg_split('/\s+/', trim($value));
     switch (count($values)) {
     case 1:
       $v1 = $values[0];
@@ -44,16 +44,17 @@ class CSSPadding extends CSSPropertyHandler {
       return CSS_PROPERTY_INHERIT;
     };
 
-    $padding = PaddingValue::init($this->parse_in($string));
+    $values = $this->parse_in($string);
+    $padding = PaddingValue::init($values);
 
     return $padding;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_PADDING;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'padding';
   }
 }
@@ -64,11 +65,11 @@ class CSSPaddingTop extends CSSSubFieldProperty {
     return PaddingSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_PADDING_TOP;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'padding-top';
   }
 }
@@ -80,11 +81,11 @@ class CSSPaddingRight extends CSSSubFieldProperty {
     return $result;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_PADDING_RIGHT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'padding-right';
   }
 }
@@ -95,11 +96,11 @@ class CSSPaddingLeft extends CSSSubFieldProperty {
     return PaddingSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_PADDING_LEFT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'padding-left';
   }
 }
@@ -113,11 +114,11 @@ class CSSPaddingBottom extends CSSSubFieldProperty {
     return PaddingSideValue::init($value); 
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_PADDING_BOTTOM;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'padding-bottom';
   }
 }
