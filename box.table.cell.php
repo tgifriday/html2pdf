@@ -45,8 +45,8 @@ class TableCellBox extends GenericContainerBox {
     /**
      * If we're in 'nowrap' mode, minimal and maximal width will be equal
      */
-    $white_space = $this->getCSSProperty(CSS_WHITE_SPACE);
-    $pseudo_nowrap = $this->getCSSProperty(CSS_HTML2PS_NOWRAP);
+    $white_space = $this->get_css_property(CSS_WHITE_SPACE);
+    $pseudo_nowrap = $this->get_css_property(CSS_HTML2PS_NOWRAP);
     if ($white_space   == WHITESPACE_NOWRAP || 
         $pseudo_nowrap == NOWRAP_NOWRAP) { 
       $min_width = $this->get_min_nowrap_width($context);
@@ -64,7 +64,7 @@ class TableCellBox extends GenericContainerBox {
     };
     
     if ($start_index < $content_size) {
-      $ti = $this->getCSSProperty(CSS_TEXT_INDENT);
+      $ti = $this->get_css_property(CSS_TEXT_INDENT);
       $minw = 
         $ti->calculate($this) + 
         $this->content[$start_index]->get_min_width($context);
@@ -82,7 +82,7 @@ class TableCellBox extends GenericContainerBox {
     /**
      * Apply width constraint to min width. Return maximal value
      */
-    $wc = $this->getCSSProperty(CSS_WIDTH);
+    $wc = $this->get_css_property(CSS_WIDTH);
     $min_width = max($minw, 
                      $wc->apply($minw, $this->parent->get_width())) + $this->_get_hor_extra();
     $this->_cache[CACHE_MIN_WIDTH] = $min_width;
@@ -110,22 +110,22 @@ class TableCellBox extends GenericContainerBox {
   }
 
   function &create(&$root, &$pipeline) {
-    $css_state = $pipeline->getCurrentCSSState();
+    $css_state = $pipeline->get_current_css_state();
 
     $box =& new TableCellBox();
     $box->readCSS($css_state);
 
     // Use cellspacing / cellpadding values from the containing table
-    $cellspacing = $box->getCSSProperty(CSS_HTML2PS_CELLSPACING);
-    $cellpadding = $box->getCSSProperty(CSS_HTML2PS_CELLPADDING);
+    $cellspacing = $box->get_css_property(CSS_HTML2PS_CELLSPACING);
+    $cellpadding = $box->get_css_property(CSS_HTML2PS_CELLPADDING);
 
     // FIXME: I'll need to resolve that issue with COLLAPSING border model. Now borders
     // are rendered separated
 
     // if not border set explicitly, inherit value set via border attribute of TABLE tag
     $border_handler = CSS::get_handler(CSS_BORDER);
-    if ($border_handler->is_default($box->getCSSProperty(CSS_BORDER))) {
-      $table_border = $box->getCSSProperty(CSS_HTML2PS_TABLE_BORDER);
+    if ($border_handler->is_default($box->get_css_property(CSS_BORDER))) {
+      $table_border = $box->get_css_property(CSS_HTML2PS_TABLE_BORDER);
       $box->setCSSProperty(CSS_BORDER, $table_border);
     };
 
@@ -133,7 +133,7 @@ class TableCellBox extends GenericContainerBox {
     $box->setCSSProperty(CSS_MARGIN, $margin->default_value());
       
     $h_padding =& CSS::get_handler(CSS_PADDING);
-    $padding = $box->getCSSProperty(CSS_PADDING);
+    $padding = $box->get_css_property(CSS_PADDING);
 
     if ($h_padding->is_default($padding)) {
       $padding->left->_units       = $cellpadding;
@@ -162,8 +162,8 @@ class TableCellBox extends GenericContainerBox {
       $box->setCSSProperty(CSS_PADDING, $padding);
     };
        
-    if ($box->getCSSProperty(CSS_BORDER_COLLAPSE) != BORDER_COLLAPSE) {
-      $margin_value = $box->getCSSProperty(CSS_MARGIN);
+    if ($box->get_css_property(CSS_BORDER_COLLAPSE) != BORDER_COLLAPSE) {
+      $margin_value = $box->get_css_property(CSS_MARGIN);
       if ($margin->is_default($margin_value)) {
         $length = $cellspacing->copy();
         $length->scale(0.5);
@@ -288,8 +288,8 @@ class TableCellBox extends GenericContainerBox {
     $this->put_left($parent->_current_x + $this->get_extra_left());
 
     // NOTE: Table cell margin is used as a cell-spacing value
-    $border = $this->getCSSProperty(CSS_BORDER);
-    $padding = $this->getCSSProperty(CSS_PADDING);
+    $border = $this->get_css_property(CSS_BORDER);
+    $padding = $this->get_css_property(CSS_PADDING);
     $this->put_top($parent->_current_y - 
                    $border->top->get_width() - 
                    $padding->top->value);

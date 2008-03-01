@@ -138,7 +138,7 @@ if (!defined('DEBUG_MODE')) {
 
 define('HTML2PS_VERSION_MAJOR', 2);
 define('HTML2PS_VERSION_MINOR', 0);
-define('HTML2PS_SUBVERSON', 39);
+define('HTML2PS_SUBVERSON', 40);
 
 define('MAX_UNPENALIZED_FREE_FRACTION', 0.25);
 define('MAX_FREE_FRACTION',             0.5);

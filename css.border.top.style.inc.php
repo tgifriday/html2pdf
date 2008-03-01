@@ -6,19 +6,19 @@ class CSSBorderTopStyle extends CSSSubProperty {
     $this->CSSSubProperty($owner);
   }
 
-  function setValue(&$owner_value, &$value) {
+  function set_value(&$owner_value, &$value) {
     $owner_value->top->style = $value;
   }
 
-  function getValue(&$owner_value) {
+  function get_value(&$owner_value) {
     return $owner_value->top->style;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BORDER_TOP_STYLE;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'border-top-style';
   }
 

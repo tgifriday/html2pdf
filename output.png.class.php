@@ -346,8 +346,8 @@ class OutputDriverPNG extends OutputDriverGeneric {
   function image_scaled($image, $x, $y, $scale_x, $scale_y) {
     $this->_fixCoords($x, $y);
 
-    $sx = imagesx($image);
-    $sy = imagesy($image);
+    $sx = $image->sx();
+    $sy = $image->sy();
 
     /**
      * Get image size in device coordinates
@@ -356,7 +356,7 @@ class OutputDriverPNG extends OutputDriverGeneric {
     $dy = $sy*$scale_y;
     $this->_fixSizes($dx, $dy);
 
-    imagecopyresampled($this->_image, $image, 
+    imagecopyresampled($this->_image, $image->get_handle(), 
                        $x, $y-$dy,
                        0, 0,
                        $dx, $dy,
@@ -369,15 +369,15 @@ class OutputDriverPNG extends OutputDriverGeneric {
     $dest_height = floor($this->_fixSizeY($height));
     $start_y = $y - $dest_height;
 
-    $sx = imagesx($image);
-    $sy = imagesy($image);
+    $sx = $image->sx();
+    $sy = $image->sy();
     $dx = $this->_fixSizeX($sx * $scale);
     $dy = $this->_fixSizeY($sy * $scale);
 
     $cx = $x;
     $cy = $start_y - ceil($this->_fixSizeY($oy) / $dest_height) * $dest_height;
     while ($cy < $base_y) {
-      imagecopyresampled($this->_image, $image,
+      imagecopyresampled($this->_image, $image->get_handle(),
                          $cx, $cy,
                          0, 0,
                          $dx, $dy,
@@ -392,8 +392,8 @@ class OutputDriverPNG extends OutputDriverGeneric {
     $dest_width = floor($this->_fixSizeX($width));
     $start_x = $x - $dest_width;
 
-    $sx = imagesx($image);
-    $sy = imagesy($image);
+    $sx = $image->sx();
+    $sy = $image->sy();
     $dx = $this->_fixSizeX($sx * $scale);
     $dy = $this->_fixSizeY($sy * $scale);
 
@@ -402,7 +402,7 @@ class OutputDriverPNG extends OutputDriverGeneric {
     $cy = $y - $dy;
 
     while ($cx < $base_x) {
-      imagecopyresampled($this->_image, $image,
+      imagecopyresampled($this->_image, $image->get_handle(),
                          $cx, $cy,
                          0, 0,
                          $dx, $dy,
@@ -420,8 +420,8 @@ class OutputDriverPNG extends OutputDriverGeneric {
     $start_x = $x - $dest_width;
     $start_y = $y - $dest_height;
 
-    $sx = imagesx($image);
-    $sy = imagesy($image);
+    $sx = $image->sx();
+    $sy = $image->sy();
     $dx = $this->_fixSizeX($sx * $scale);
     $dy = $this->_fixSizeY($sy * $scale);
 
@@ -430,7 +430,8 @@ class OutputDriverPNG extends OutputDriverGeneric {
 
     while ($cy < $base_y) {
       while ($cx < $base_x) {
-        imagecopyresampled($this->_image, $image,
+        imagecopyresampled($this->_image, 
+                           $image->get_handle(),
                            $cx, $cy,
                            0, 0,
                            $dx, $dy,

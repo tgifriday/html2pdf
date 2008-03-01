@@ -312,6 +312,8 @@ class Pipeline {
   var $_page_break_strategy;
 
   function Pipeline() {
+    $this->_css = array();
+    
     $this->_counters = array();
     $this->_footnotes = array();
 
@@ -461,7 +463,7 @@ class Pipeline {
     return $this->_dispatcher;
   }
 
-  function _getCounter($counter) {
+  function get_counter($counter) {
     if (isset($this->_counters[$counter])) { 
       return $this->_counters[$counter];
     };
@@ -474,11 +476,11 @@ class Pipeline {
     return 0;
   }
 
-  function _resetCounter($counter, $value) {
+  function reset_counter($counter, $value) {
     $this->_counters[$counter] = $value;
   }
 
-  function _incrementCounter($counter, $value) {
+  function increment_counter($counter, $value) {
     $this->_counters[$counter] += $value;
   }
 
@@ -496,23 +498,23 @@ class Pipeline {
                                   CSS_PAGE_SELECTOR_NAMED => array());
   }
 
-  function &getDefaultCSS() {
+  function &get_default_css() {
     return $this->_defaultCSS;
   }
 
-  function &getCurrentCSS() {
+  function &get_current_css() {
     return $this->_css[0];
   }
 
-  function &getCurrentCSSState() {
+  function &get_current_css_state() {
     return $this->_cssState[0];
   }
 
-  function pushCSS() {
+  function push_css() {
     array_unshift($this->_css, new CSSRuleset());
   }
 
-  function popCSS() {
+  function pop_css() {
     array_shift($this->_css);
   }
 
@@ -542,14 +544,14 @@ class Pipeline {
 
   function get_page_media($page_no, &$media) {
     $page_rules =& $this->get_page_rules($page_no);
-    $size_landscape = $page_rules->getPropertyValue(CSS_SIZE);
+    $size_landscape = $page_rules->get_property_value(CSS_SIZE);
     if (!is_null($size_landscape)) {
       $media->set_width($size_landscape['size']['width']);
       $media->set_height($size_landscape['size']['height']);
       $media->set_landscape($size_landscape['landscape']);
     };
 
-    $margins = $page_rules->getPropertyValue(CSS_MARGIN);
+    $margins = $page_rules->get_property_value(CSS_MARGIN);
     if (!is_null($margins)) {
       $media->margins['left'] = $margins->left->calc(mm2pt($media->get_width())) / mm2pt(1) / pt2pt(1);
       $media->margins['right'] = $margins->right->calc(mm2pt($media->get_width())) / mm2pt(1) / pt2pt(1);
@@ -557,27 +559,27 @@ class Pipeline {
       $media->margins['bottom'] = $margins->bottom->calc(mm2pt($media->get_height())) / mm2pt(1) / pt2pt(1);
     };
 
-    $left_margin = $page_rules->getPropertyValue(CSS_MARGIN_LEFT);
+    $left_margin = $page_rules->get_property_value(CSS_MARGIN_LEFT);
     if (!is_null($left_margin)) {
       $media->margins['left'] = $left_margin->calc(mm2pt($media->get_width())) / mm2pt(1) / pt2pt(1);
     };
 
-    $right_margin = $page_rules->getPropertyValue(CSS_MARGIN_RIGHT);
+    $right_margin = $page_rules->get_property_value(CSS_MARGIN_RIGHT);
     if (!is_null($right_margin)) {
       $media->margins['right'] = $right_margin->calc(mm2pt($media->get_width())) / mm2pt(1) / pt2pt(1);
     };
 
-    $top_margin = $page_rules->getPropertyValue(CSS_MARGIN_TOP);
+    $top_margin = $page_rules->get_property_value(CSS_MARGIN_TOP);
     if (!is_null($top_margin)) {
       $media->margins['top'] = $top_margin->calc(mm2pt($media->get_height())) / mm2pt(1) / pt2pt(1);
     };
 
-    $bottom_margin = $page_rules->getPropertyValue(CSS_MARGIN_BOTTOM);
+    $bottom_margin = $page_rules->get_property_value(CSS_MARGIN_BOTTOM);
     if (!is_null($bottom_margin)) {
       $media->margins['bottom'] = $bottom_margin->calc(mm2pt($media->get_height())) / mm2pt(1) / pt2pt(1);
     };
 
-    $pixels = $page_rules->getPropertyValue(CSS_HTML2PS_PIXELS);
+    $pixels = $page_rules->get_property_value(CSS_HTML2PS_PIXELS);
     if (!is_null($pixels)) {
       $media->set_pixels($pixels);
     };
@@ -794,7 +796,7 @@ class Pipeline {
     $this->_show_item($box, $offset, $context, $media, $postponed_filter);
 
     // Clear CSS for this item 
-    $this->popCSS();
+    $this->pop_css();
     $this->_defaultCSS = null;
 
     // Memory leak fix: caused by circular references?
@@ -824,8 +826,8 @@ class Pipeline {
 
     $expected_pages = count($page_heights);
     $this->output_driver->set_expected_pages($expected_pages);
-    $this->_resetCounter('pages', $expected_pages);
-    $this->_resetCounter('page',  0);
+    $this->reset_counter('pages', $expected_pages);
+    $this->reset_counter('page',  0);
 
     // Output PDF pages using chosen PDF driver
     for ($i=0; $i<$expected_pages; $i++) {
@@ -842,8 +844,8 @@ class Pipeline {
       // Preparen list of postponed (floating and relative-positioned) boxes for the current page
       $postponed_filter->process($box, null, $this);
 
-      $this->_resetCounter('footnote', 0);
-      $this->_incrementCounter('page', 1);
+      $this->reset_counter('footnote', 0);
+      $this->increment_counter('page', 1);
 
       $this->output_driver->save();
 
@@ -925,11 +927,12 @@ class Pipeline {
   function &fetch($data_id) {
     if (count($this->fetchers) == 0) { 
       ob_start();
-      include(HTML2PS_DIR.'/templates/error._no_fetchers.tpl');
+      include(HTML2PS_DIR.'templates/error._no_fetchers.tpl');
       $this->error_message = ob_get_contents();
       ob_end_clean();
 
-      return null; 
+      $null = null;
+      return $null; 
     };
 
     // Fetch data
@@ -1006,7 +1009,7 @@ class Pipeline {
   }
 
   function error_message() {
-    $message = file_get_contents(HTML2PS_DIR.'/templates/error._header.tpl');
+    $message = file_get_contents(HTML2PS_DIR.'templates/error._header.tpl');
 
     $message .= $this->error_message;
 
@@ -1016,7 +1019,7 @@ class Pipeline {
 
     $message .= $this->output_driver->error_message();
     
-    $message .= file_get_contents(HTML2PS_DIR.'/templates/error._footer.tpl');
+    $message .= file_get_contents(HTML2PS_DIR.'templates/error._footer.tpl');
     return $message;
   }
 
@@ -1077,7 +1080,7 @@ class Pipeline {
   function renderAbsolutePositioned(&$context) {
     for ($j=0, $size = count($context->absolute_positioned); $j<$size; $j++) {
       $current_box =& $context->absolute_positioned[$j];
-      if ($current_box->getCSSProperty(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
+      if ($current_box->get_css_property(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
         $this->output_driver->save();
         $current_box->_setupClip($this->output_driver);
         if (is_null($current_box->show($this->output_driver))) {
@@ -1092,7 +1095,7 @@ class Pipeline {
   function renderFixedPositioned(&$context) {
     for ($j=0, $size = count($context->fixed_positioned); $j<$size; $j++) {
       $current_box =& $context->fixed_positioned[$j];
-      if ($current_box->getCSSProperty(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
+      if ($current_box->get_css_property(CSS_VISIBILITY) === VISIBILITY_VISIBLE) {
         $this->output_driver->save();
         $current_box->_setupClip($this->output_driver);
         if (is_null($current_box->show_fixed($this->output_driver))) { 
@@ -1110,20 +1113,25 @@ class Pipeline {
     $this->output_driver->reset($media);
   }
 
+  function reset_css() {
+    $css_cache = CSSCache::get();
+    $this->_defaultCSS = $css_cache->compile('resource://default.css', 
+                                             file_get_contents(HTML2PS_DIR.'default.css'),
+                                             $this);
+    $this->_css = array();
+    $this->push_css();
+
+    $this->_cssState = array(new CSSState(CSS::get()));
+  }
+
   function &_layout_item($data_id, &$media, $offset, &$context, &$postponed_filter) {
     $this->_reset_page_at_rules();
 
-    $css_cache = CSSCache::get();
-    $this->_defaultCSS = $css_cache->compile('resource://default.css', 
-                                             file_get_contents(HTML2PS_DIR.'/default.css'));
-    $this->_css = array();
-    $this->pushCSS();
+    $this->reset_css();
 
-    $this->_cssState = array(new CSSState(CSS::get()));
-
-    $font = $this->_cssState[0]->getProperty(CSS_FONT);
+    $font = $this->_cssState[0]->get_property(CSS_FONT);
     $font->units2pt(0);
-    $this->_cssState[0]->setProperty(CSS_FONT, $font);
+    $this->_cssState[0]->set_property(CSS_FONT, $font);
 
     $data = $this->fetch($data_id);
 
@@ -1133,7 +1141,7 @@ class Pipeline {
     };
 
     // Run raw data filters
-    for ($i=0; $i<count($this->data_filters); $i++) {
+    for ($i = 0; $i < count($this->data_filters); $i++) {
       $data = $this->data_filters[$i]->process($data);
     };
 

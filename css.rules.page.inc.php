@@ -88,7 +88,7 @@ class CSSAtRulePage {
   }
 
   function setCSSProperty($property) {
-    $this->css->addProperty($property);
+    $this->css->add_property($property);
   }
 }
 
@@ -163,11 +163,11 @@ class CSSAtRuleMarginBox {
   }
 
   function setCSSProperty($property) {
-    $this->css->addProperty($property);
+    $this->css->add_property($property);
   }
 
-  function &getCSSProperty($code) {
-    return $this->css->getProperty($code);
+  function &get_css_property($code) {
+    return $this->css->get_property($code);
   }
 }
 

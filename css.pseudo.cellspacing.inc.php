@@ -14,11 +14,11 @@ class CSSCellSpacing extends CSSPropertyHandler {
     return Value::fromString($value);
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_HTML2PS_CELLSPACING;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return '-html2ps-cellspacing';
   }
 }

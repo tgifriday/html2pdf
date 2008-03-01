@@ -9,12 +9,12 @@ class CSSSubFieldProperty extends CSSSubProperty {
     $this->_owner_field = $field;
   }
 
-  function setValue(&$owner_value, &$value) {
+  function set_value(&$owner_value, &$value) {
     $field = $this->_owner_field;
     $owner_value->$field = $value;
   }
 
-  function &getValue(&$owner_value) {
+  function &get_value(&$owner_value) {
     $field = $this->_owner_field;
     return $owner_value->$field;
   }

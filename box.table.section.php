@@ -3,7 +3,7 @@
 
 class TableSectionBox extends GenericContainerBox {
   function &create(&$root, &$pipeline) {
-    $state =& $pipeline->getCurrentCSSState();
+    $state =& $pipeline->get_current_css_state();
     $box =& new TableSectionBox();
     $box->readCSS($state);
 

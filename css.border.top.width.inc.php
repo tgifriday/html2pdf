@@ -6,7 +6,7 @@ class CSSBorderTopWidth extends CSSSubProperty {
     $this->CSSSubProperty($owner);
   }
 
-  function setValue(&$owner_value, &$value) {
+  function set_value(&$owner_value, &$value) {
     if ($value != CSS_PROPERTY_INHERIT) {
       $owner_value->top->width = $value->copy();
     } else {
@@ -14,15 +14,15 @@ class CSSBorderTopWidth extends CSSSubProperty {
     };
   }
 
-  function getValue(&$owner_value) {
+  function get_value(&$owner_value) {
     return $owner_value->top->width;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_BORDER_TOP_WIDTH;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'border-top-width';
   }
 

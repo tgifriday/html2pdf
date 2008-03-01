@@ -25,11 +25,11 @@ class CSSPseudoLinkTarget extends CSSPropertyHandler {
     };
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_HTML2PS_LINK_TARGET;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return '-html2ps-link-target';
   }
 }

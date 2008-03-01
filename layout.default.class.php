@@ -15,7 +15,7 @@ class LayoutEngineDefault extends LayoutEngine {
     // on the paged media.
     $box->_height_constraint = new HCConstraint(null, null, null);
 
-    $margin = $box->getCSSProperty(CSS_MARGIN);
+    $margin = $box->get_css_property(CSS_MARGIN);
     $margin->calcPercentages(mm2pt($media->width() - $media->margins['left'] - $media->margins['right']));
     $box->setCSSProperty(CSS_MARGIN, $margin);
 

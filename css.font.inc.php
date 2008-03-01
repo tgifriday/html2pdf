@@ -157,21 +157,21 @@ class CSSFont extends CSSPropertyHandler {
     return $font;
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_FONT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'font';
   }
 
   function clearDefaultFlags(&$state) {
     parent::clearDefaultFlags($state);
-    $state->setPropertyDefaultFlag(CSS_FONT_SIZE, false);
-    $state->setPropertyDefaultFlag(CSS_FONT_STYLE, false);
-    $state->setPropertyDefaultFlag(CSS_FONT_WEIGHT, false);
-    $state->setPropertyDefaultFlag(CSS_FONT_FAMILY, false);
-    $state->setPropertyDefaultFlag(CSS_LINE_HEIGHT, false);
+    $state->set_propertyDefaultFlag(CSS_FONT_SIZE, false);
+    $state->set_propertyDefaultFlag(CSS_FONT_STYLE, false);
+    $state->set_propertyDefaultFlag(CSS_FONT_WEIGHT, false);
+    $state->set_propertyDefaultFlag(CSS_FONT_FAMILY, false);
+    $state->set_propertyDefaultFlag(CSS_LINE_HEIGHT, false);
   }
 }
 

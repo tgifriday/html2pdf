@@ -38,7 +38,7 @@ class BoxNoteCall extends GenericInlineBox {
     $this->_note_call_box->copy_style($content);
     $this->_note_call_box->content[0]->copy_style($content);
 
-    $font = $this->_note_call_box->content[0]->getCSSProperty(CSS_FONT);
+    $font = $this->_note_call_box->content[0]->get_css_property(CSS_FONT);
     $font = $font->copy();
     $font->size->scale(0.75);
     $this->_note_call_box->content[0]->setCSSProperty(CSS_FONT, $font);
@@ -57,12 +57,12 @@ class BoxNoteCall extends GenericInlineBox {
     $this->_note_marker_box->copy_style($content);
     $this->_note_marker_box->content[0]->copy_style($content);
 
-    $font = $this->_note_marker_box->content[0]->getCSSProperty(CSS_FONT);
+    $font = $this->_note_marker_box->content[0]->get_css_property(CSS_FONT);
     $font = $font->copy();
     $font->size->scale(0.5);
     $this->_note_marker_box->content[0]->setCSSProperty(CSS_FONT, $font);
 
-    $margin = $this->_note_marker_box->content[0]->getCSSProperty(CSS_MARGIN);
+    $margin = $this->_note_marker_box->content[0]->get_css_property(CSS_MARGIN);
     $margin = $margin->copy();
     $margin->right = Value::fromData(FOOTNOTE_MARKER_MARGIN, UNIT_PT);
     $this->_note_marker_box->content[0]->setCSSProperty(CSS_MARGIN, $margin);

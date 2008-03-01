@@ -21,11 +21,11 @@ class CSSRight extends CSSPropertyHandler {
     return ValueRight::fromString($value);
   }
 
-  function getPropertyCode() {
+  function get_property_code() {
     return CSS_RIGHT;
   }
 
-  function getPropertyName() {
+  function get_property_name() {
     return 'right';
   }
 }

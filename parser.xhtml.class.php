@@ -6,7 +6,7 @@ class ParserXHTML extends Parser {
 
     // Check if parser returned valid document
     if (is_null($dom_tree)) {
-      readfile(HTML2PS_DIR.'/templates/cannot_parse.html');
+      readfile(HTML2PS_DIR.'templates/cannot_parse.html');
       error_log(sprintf("Cannot parse document: %s", $pipeline->get_base_url()));
       die("HTML2PS Error");
     }
@@ -36,7 +36,7 @@ class ParserXHTML extends Parser {
      * This should be done here, as the document body may include STYLE node 
      * (this violates HTML standard, but is rather often appears in Web)
      */
-    $css =& $pipeline->getCurrentCSS();
+    $css =& $pipeline->get_current_css();
     $css->scan_styles($dom_tree, $pipeline);
 
     if (!is_null($media)) {

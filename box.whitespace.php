@@ -4,7 +4,7 @@
 class WhitespaceBox extends TextBox {
   function &create(&$pipeline) {
     $box =& new WhitespaceBox();
-    $box->readCSS($pipeline->getCurrentCSSState());
+    $box->readCSS($pipeline->get_current_css_state());
     $box->add_subword(" ", 'iso-8859-1', array());
     return $box;
   }
@@ -87,8 +87,8 @@ class WhitespaceBox extends TextBox {
     };
 
     // Override widths
-    $letter_spacing = $this->getCSSProperty(CSS_LETTER_SPACING);
-    $word_spacing   = $this->getCSSProperty(CSS_WORD_SPACING);
+    $letter_spacing = $this->get_css_property(CSS_LETTER_SPACING);
+    $word_spacing   = $this->get_css_property(CSS_WORD_SPACING);
 
     $this->width = 
       $this->height * WHITESPACE_FONT_SIZE_FRACTION + 
@@ -102,7 +102,7 @@ class WhitespaceBox extends TextBox {
     if (!$linebox_started || 
         ($linebox_started && $previous_whitespace)) {     
       
-      $link_destination = $this->getCSSProperty(CSS_HTML2PS_LINK_DESTINATION);
+      $link_destination = $this->get_css_property(CSS_HTML2PS_LINK_DESTINATION);
       if (is_null($link_destination)) {
         $this->parent->remove($this);
         return;

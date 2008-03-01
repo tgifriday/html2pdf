@@ -10,8 +10,8 @@ class PostTreeFilterPositioned extends PreTreeFilter {
   function process(&$tree, $data, &$pipeline) {
     if (is_a($tree, 'GenericContainerBox')) {
       for ($i=0; $i<count($tree->content); $i++) {
-        $position = $tree->content[$i]->getCSSProperty(CSS_POSITION);
-        $float    = $tree->content[$i]->getCSSProperty(CSS_FLOAT);
+        $position = $tree->content[$i]->get_css_property(CSS_POSITION);
+        $float    = $tree->content[$i]->get_css_property(CSS_FLOAT);
 
         if ($position == POSITION_ABSOLUTE) {
           $this->_context->add_absolute_positioned($tree->content[$i]);
