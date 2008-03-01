@@ -970,7 +970,7 @@ class InlineContentBuilder {
     $output_handle = fopen($output_filename, 'wb');
     flock($output_handle, LOCK_EX);
 
-    $input_handle = fopen(HTML2PS_DIR.'/data/LineBreak.txt', 'r');
+    $input_handle = fopen(HTML2PS_DIR.'/data/linebreak.txt', 'r');
     $last_position = 0;
     while ($line = fgets($input_handle)) {
       $line = trim($line);

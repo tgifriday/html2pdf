@@ -140,6 +140,8 @@ require_once(HTML2PS_DIR.'css.property.stringset.class.php');
 require_once(HTML2PS_DIR.'css.property.sub.class.php');
 require_once(HTML2PS_DIR.'css.property.sub.field.class.php');
 require_once(HTML2PS_DIR.'css.utils.inc.php');
+require_once(HTML2PS_DIR.'css.parse.inc.php');
+require_once(HTML2PS_DIR.'css.parse.media.inc.php');
 
 require_once(HTML2PS_DIR.'css.background.attachment.inc.php');
 require_once(HTML2PS_DIR.'css.background.color.inc.php');
@@ -221,7 +223,6 @@ require_once(HTML2PS_DIR.'css.pseudo.table.border.inc.php');
 // After all CSS utilities and constants have been initialized, load the default (precomiled) CSS stylesheet
 require_once(HTML2PS_DIR.'converter.class.php');
 require_once(HTML2PS_DIR.'treebuilder.class.php');
-require_once(HTML2PS_DIR.'dombuilder.class.php');
 require_once(HTML2PS_DIR.'image.class.php');
 
 require_once(HTML2PS_DIR.'fetched_data._interface.class.php');
@@ -282,14 +283,6 @@ require_once(HTML2PS_DIR.'autofix.url.php');
 require_once(HTML2PS_DIR.'fetcher._interface.class.php');
 require_once(HTML2PS_DIR.'features/_factory.php');
 
-require_once(HTML2PS_DIR.'css.property.collection.php');
-require_once(HTML2PS_DIR.'css.rules.page.inc.php');
-
-require_once(HTML2PS_DIR.'css/lexer.php');
-require_once(HTML2PS_DIR.'css/parser.php');
-require_once(HTML2PS_DIR.'css/stream.string.php');
-require_once(HTML2PS_DIR.'css/processor.php');
-
 class Pipeline {
   var $fetchers;
   var $data_filters;
@@ -320,7 +313,7 @@ class Pipeline {
 
   function Pipeline() {
     $this->_css = array();
-
+    
     $this->_counters = array();
     $this->_footnotes = array();
 
@@ -331,7 +324,6 @@ class Pipeline {
 
     $this->_dispatcher =& new Dispatcher();
 
-    $this->_dispatcher->add_event('after-driver-init');
     $this->_dispatcher->add_event('before-page-heights');
     $this->_dispatcher->add_event('before-page');
     $this->_dispatcher->add_event('after-page');
@@ -452,7 +444,7 @@ class Pipeline {
 
 //   function _fillContentCounter($content) {
 //     preg_match("/counter\((.*?)\)/", $content, $matches);
-//     return $this->get_counter($matches[1]);
+//     return $this->_getCounter($matches[1]);
 //   }
 
   function &get_counters() {
@@ -924,15 +916,6 @@ class Pipeline {
     unlink($temporary_output_filename);
   }
 
-  function scan_styles(&$root) {
-    $css_processor =& new CSSProcessor(); 
-    $css_processor->set_pipeline($this);
-
-    $this->push_css();
-    $ruleset =& $this->get_current_css();
-    $css_processor->scan_node($root, $ruleset);
-  }
-
   function set_destination(&$destination) {
     $this->destination =& $destination;
   }
@@ -1128,10 +1111,6 @@ class Pipeline {
     $this->_setupScales($media);
     $GLOBALS['g_media'] =& $media;
     $this->output_driver->reset($media);
-
-    $this->_dispatcher->fire('after-driver-init', 
-                             array('pipeline' => &$this,
-                                   'media' => &$media));
   }
 
   function reset_css() {
@@ -1141,6 +1120,7 @@ class Pipeline {
                                              $this);
     $this->_css = array();
     $this->push_css();
+
     $this->_cssState = array(new CSSState(CSS::get()));
   }
 
@@ -1161,7 +1141,7 @@ class Pipeline {
     };
 
     // Run raw data filters
-    for ($i=0; $i<count($this->data_filters); $i++) {
+    for ($i = 0; $i < count($this->data_filters); $i++) {
       $data = $this->data_filters[$i]->process($data);
     };
 
