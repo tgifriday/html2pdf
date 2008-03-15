@@ -93,6 +93,10 @@ input,textarea,select {
         background-color:#eeeeee;
         border: 1px solid #045564;
 }
+textarea {
+ width: 290px;
+ height: 150px;
+}
 img {
         border:0px;
 }
