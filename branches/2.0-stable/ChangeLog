@@ -1,3 +1,9 @@
+2008-03-15 Konstantin Bournayev <bkon@bkon.ru>
+
+	* Change: library version number is displayed on the web interface now
+
+	* Change: minor FAQ update
+
 2008-03-01 Konstantin Bournayev <bkon@bkon.ru>
 
 	* Release: html2ps-2.0.40
