@@ -1,12 +1,6 @@
 <?php
 // $Header: /cvsroot/html2ps/demo/index.php,v 1.5 2007/05/06 18:49:30 Konstantin Exp $
-/* remarked out for testing at halfadot
-   unknown if these included elements are needed
-  require_once('config.inc.php');
-  require_once('media.layout.inc.php');
-  require_once('treebuilder.class.php');
-  parse_config_file('./.html2ps.config');
-*/
+  require_once('../config.inc.php');
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -151,7 +145,7 @@ div.comment {
 </style>
 </head>
 <body>
-<h1>html2ps/pdf demo</h1>
+<h1>html2ps/pdf demo (v <?php echo HTML2PS_VERSION_MAJOR ?>.<?php echo HTML2PS_VERSION_MINOR ?>.<?php echo HTML2PS_SUBVERSION ?>)</h1>
 
 <p><a target="_blank" href="http://www.cs.wisc.edu/~ghost/" title="More about GhostView - [new window]">GhostView</a> can be used to read PostScript files, and <a target="_blank"  href="http://www.adobe.com/products/acrobat/readstep2.html" title="Download Adobe Acrobat - [new window]">Adobe Acrobat Reader</a> can be used to read PDF files.</p>
 <p>See also:
@@ -529,7 +523,7 @@ as Acrobat Reader will treat compressed file as damaged.
 <p><a target=_blank href="https://www.paypal.com/xclick/business=g8z@yahoo.com&item_name=html2ps+donation&no_shipping=1&currency_code=USD">Donate to the html2ps project</a></p>
 
 <hr/>
-&copy; 2005&ndash;2006 Darren Gates, Konstantin Bournayev 
+&copy; 2005&ndash;2008 Darren Gates, Konstantin Bournayev 
 
 </body>
 </html>
