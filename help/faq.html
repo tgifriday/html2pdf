@@ -257,7 +257,7 @@ PreTreeFilterHeaderFooter filter in API</li>
 <li>Use <a href="compatibility.css.3.html#marginboxes">CSS 3 margin boxes</a>.</li>
 </ul>
 Note that when you use PreTreeFilterHeaderFooter or Header/Footer fields in web interface,
-content is implicitly placed in fixed-positioned div; you may thing of this as follows:
+content is implicitly placed in fixed-positioned div; you may think of this as follows:
 <pre>
 ...
 &lt;body&gt;
@@ -273,6 +273,10 @@ your HTML content
 &lt;/body&gt;
 ...
 </pre>
+<p><strong>Important note:</strong> HTML code added via PreTreeFilterHeaderFooter should be (almost) valid XHTML 
+(see <a href="http://www.w3.org/TR/xhtml1/#diffs">XHTML 1.0: Differences with HTML 4</a>); 
+in particular, all tags / attributes should be in lower case. <em>Almost</em> means that you don't need to specify
+wrapping <tt>html</tt>, <tt>head</tt> and <tt>body</tt> tags for the header content.</p>
 </dd>
 
 <dt><a name="hide-headers">I've added headers and footers to my HTML pages, but how I can prevent them from showing up in the browser?</a></dt>
