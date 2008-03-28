@@ -3,6 +3,7 @@
 
 require_once(HTML2PS_DIR.'pdf.fpdf.php');
 require_once(HTML2PS_DIR.'pdf.fpdf.makefont.php');
+// require_once(HTML2PS_DIR.'fpdf/font/makefont/makefont.php');
 
 class OutputDriverFPDF extends OutputDriverGenericPDF {
   var $pdf;
@@ -326,10 +327,7 @@ class OutputDriverFPDF extends OutputDriverGenericPDF {
   function reset(&$media) {
     parent::reset($media);   
 
-    $this->pdf =& new FPDF('P', 
-                           'pt', 
-                           array(mm2pt($media->width()), 
-                                 mm2pt($media->height())));
+    $this->pdf =& new FPDF('P','pt',array(mm2pt($media->width()), mm2pt($media->height())));
 
     if (defined('DEBUG_MODE')) {
       $this->pdf->SetCompression(false);
