@@ -1,4 +1,16 @@
+2008-03-27 Konstantin Bournayev <bkon@bkon.ru>
+
+ 	* Release: html2ps-2.0.42
+
+	* Fixed: number  of  custom  characters no  more  limited to  256
+	symbols per file
+
+	* Fixed: Characters  with AI, SA, SG and  XX line breaking classes
+	no more result in notice messages.
+
 2008-03-15 Konstantin Bournayev <bkon@bkon.ru>
+
+ 	* Release: html2ps-2.0.41
 
 	* Change: library version number is displayed on the web interface now
 
@@ -6,7 +18,7 @@
 
 2008-03-01 Konstantin Bournayev <bkon@bkon.ru>
 
-	* Release: html2ps-2.0.40
+ 	* Release: html2ps-2.0.40
 
 	* Change: unicode-aware line breaking algorithm
 	
