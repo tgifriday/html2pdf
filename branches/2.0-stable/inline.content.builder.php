@@ -767,7 +767,7 @@ class InlineContentBuilder {
     $ucs2_chars = array();
     $size = strlen($content);
     while ($ptr < $size) {
-      $utf8_char = ManagerEncoding::getNextUTF8Char($content, $ptr);
+      $utf8_char = ManagerEncoding::get_next_utf8_char($content, $ptr);
       $utf8_chars[] = $utf8_char;
       $ucs2_chars[] = utf8_to_code($utf8_char);
     };
@@ -910,6 +910,27 @@ class InlineContentBuilder {
       $class_cache[$ucs2_char] = ord(fread($table_handle, 1));
     };
 
+    // Apply rule LB1 from the Unicode algorithm:
+    //
+    // Assign  a  line  breaking  class  to each  code  point  of  the
+    // input. Resolve AI, CB, SA,  SG, and XX into other line breaking
+    // classes  depending  on  criteria  outside  the  scope  of  this
+    // algorithm.
+    //
+    // In the absence of such criteria, it is recommended that classes
+    // AI, SA, SG, and XX be resolved to AL, except that characters of
+    // class SA that have General_Category  Mn or Mc be resolved to CM
+    // (see SA). Unresolved class CB is handled in rule LB20.
+
+    // Resolve AI, SA, SG, and XX to AL
+    if (in_array($class_cache[$ucs2_char],
+                 array(UC_LINE_BREAK_AI,
+                       UC_LINE_BREAK_SA,
+                       UC_LINE_BREAK_SG,
+                       UC_LINE_BREAK_XX))) {
+      return UC_LINE_BREAK_AL;
+    };
+
     return $class_cache[$ucs2_char];
   }
 
@@ -970,7 +991,7 @@ class InlineContentBuilder {
     $output_handle = fopen($output_filename, 'wb');
     flock($output_handle, LOCK_EX);
 
-    $input_handle = fopen(HTML2PS_DIR.'/data/linebreak.txt', 'r');
+    $input_handle = fopen(HTML2PS_DIR.'/data/LineBreak.txt', 'r');
     $last_position = 0;
     while ($line = fgets($input_handle)) {
       $line = trim($line);
