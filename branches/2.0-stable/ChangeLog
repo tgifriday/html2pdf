@@ -1,3 +1,16 @@
+2008-04-13 Konstantin Bournayev <bkon@bkon.ru>
+
+ 	* Release: html2ps-2.0.43
+
+	* Fixed:  space could be  added after some  non-whitespace symbols
+	immediately followed by inline boxes.
+
+	*  Fixed:  under  certain  circumstances  custom  characters  were
+	ignored in CSS3 margin box content
+
+	* Fixed:  some temporary  files were not  removed when  using fpdf
+	output method
+
 2008-03-27 Konstantin Bournayev <bkon@bkon.ru>
 
  	* Release: html2ps-2.0.42
