@@ -138,15 +138,8 @@ function &create_node_box(&$root, &$pipeline) {
   $css->apply($root, $css_state, $pipeline);
 
   // values from 'style' attribute
-  if ($root->has_attribute('style')) {     
-    $css_processor =& new CSSProcessor(); 
-    $css_processor->set_pipeline($pipeline);
-
-    $style = $root->get_attribute('style');
-    $property_collection = $css_processor->import_source_ruleset($style, 
-                                                                 $pipeline->get_base_url());
-
-    $property_collection->apply($css_state);
+  if ($root->has_attribute("style")) { 
+    parse_style_attr($root, $css_state, $pipeline); 
   };
     
   _fix_tag_display($default_display, $css_state, $pipeline);
