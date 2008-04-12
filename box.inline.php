@@ -94,10 +94,10 @@ class InlineBox extends GenericInlineBox {
     // Create contents of this inline box
     if ($root->node_type() == XML_TEXT_NODE) {
       $css_state =& $pipeline->get_current_css_state();
-      return InlineBox::create_from_text($root->content, 
+      $box = InlineBox::create_from_text($root->content, 
                                          $css_state->get_property(CSS_WHITE_SPACE), 
                                          $pipeline);
-
+      return $box;
     } else {
       $box =& new InlineBox();
 

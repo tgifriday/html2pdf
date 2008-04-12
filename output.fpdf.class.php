@@ -167,6 +167,7 @@ class OutputDriverFPDF extends OutputDriverGenericPDF {
                       $y - $image->sy() * $scale, 
                       $image->sx() * $scale, 
                       $image->sy() * $scale);
+
     unlink($tmpname);
   }
 
@@ -407,17 +408,23 @@ class OutputDriverFPDF extends OutputDriverGenericPDF {
   }
 
   function _mktempimage($image) {   
+    $tempnam = tempnam(WRITER_TEMPDIR, WRITER_FILE_PREFIX);
+
     switch ($image->get_type()) {
     case 'image/png':
-      $filename = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX).'.png';
+      $filename = $tempnam . '.png';
       imagepng($image->get_handle(), $filename);
-      return $filename;
+      break;
+
     case 'image/jpeg':
     default:
-      $filename = tempnam(WRITER_TEMPDIR,WRITER_FILE_PREFIX).'.jpg';
+      $filename = $tempnam . '.jpg';
       imagejpeg($image->get_handle(), $filename);
-      return $filename;
+      break;
     }
+
+    unlink($tempnam);
+    return $filename;
   }
 }
 ?>

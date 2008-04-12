@@ -630,7 +630,7 @@ class Pipeline {
 
   function &reflow_margin_boxes($page_no, &$media) {
     $at_rules = $this->_getMarginBoxes($page_no, $media);
-
+    
     $boxes = array();
     foreach ($at_rules as $at_rule) {
       $selector = $at_rule->getSelector();
@@ -828,9 +828,9 @@ class Pipeline {
     $this->output_driver->set_expected_pages($expected_pages);
     $this->reset_counter('pages', $expected_pages);
     $this->reset_counter('page',  0);
-
+    
     // Output PDF pages using chosen PDF driver
-    for ($i=0; $i<$expected_pages; $i++) {
+    for ($i = 0; $i < $expected_pages; $i++) {
       $this->get_page_media(1, $media);
 
       $this->output_driver->update_media($media);
@@ -1185,6 +1185,18 @@ class Pipeline {
     $postponed_filter->process($box, null, $this);
 
     $this->output_driver->prepare();
+
+    // Force generation of custom characters for margin boxes
+    for ($i = 0; $i <= 1; $i++) {
+      $this->get_page_media(1, $media);
+      $at_rules = $this->_getMarginBoxes($i, $media);
+      
+      $boxes = array();
+      foreach ($at_rules as $at_rule) {
+        $selector = $at_rule->getSelector();
+        $boxes[$selector] =& BoxPageMargin::create($this, $at_rule);
+      };
+    };
 
     $status = $this->layout_engine->process($box, $media, $this->output_driver, $context);
     if (is_null($status)) { 
