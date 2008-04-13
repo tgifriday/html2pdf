@@ -21,11 +21,26 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
 
   var $_status;
 
+  function OutputDriverPdflib($version) {
+    $this->OutputDriverGenericPDF();
+    $this->set_pdf_version($version);
+
+    $this->_currentfont = null;
+    $this->_radiogroups = array();
+    $this->_field_names = array();
+
+    $this->_status = PDFLIB_STATUS_INITIALIZED;
+  }
+
+  function create_pdf() {
+    pdf_open_file($this->pdf, $this->get_filename());
+  }
+
   // Converts common encoding names to their PDFLIB equivalents 
   // (for example, PDFLIB does not understand iso-8859-1 encoding name,
   // but have its equivalent names winansi..)
   //
-   function encoding($encoding) {
+  function encoding($encoding) {
     $encoding = trim(strtolower($encoding));
 
     $translations = array(
@@ -279,17 +294,6 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
     $this->_status = PDFLIB_STATUS_PAGE_STARTED;
   }
 
-  function OutputDriverPdflib($version) {
-    $this->OutputDriverGenericPDF();
-    $this->set_pdf_version($version);
-
-    $this->_currentfont = null;
-    $this->_radiogroups = array();
-    $this->_field_names = array();
-
-    $this->_status = PDFLIB_STATUS_INITIALIZED;
-  }
-
   function prepare() {
     parent::prepare();
 
@@ -327,7 +331,7 @@ class OutputDriverPdflib extends OutputDriverGenericPDF {
       pdf_set_parameter($this->pdf, "license", PDFLIB_LICENSE);
     };
 
-    pdf_open_file($this->pdf, $this->get_filename());
+    $this->create_pdf();
 
     // @TODO: compression level, debug
     pdf_set_value($this->pdf, "compress", 0);

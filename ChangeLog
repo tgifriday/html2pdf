@@ -1,3 +1,11 @@
+2008-03-27 Konstantin Bournayev <bkon@bkon.ru>
+
+	* Change: PDFLIB 1.6 output now supports PDF encryption
+
+2008-03-15 Konstantin Bournayev <bkon@bkon.ru>
+
+	* Change: library version number is displayed on the web interface now
+
 2008-03-15 Konstantin Bournayev <bkon@bkon.ru>
 
 	* Change: library version number is displayed on the web interface now
