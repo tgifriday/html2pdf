@@ -13,12 +13,12 @@
 //
 $GLOBALS['g_image_cache'] = array();
 
-class Image {
+class Html2PsImage {
   var $_handle;
   var $_filename;
   var $_type;
 
-  function Image($handle, $filename, $type) {
+  function __construct($handle, $filename, $type) {
     $this->_handle = $handle;
     $this->_filename = $filename;
     $this->_type = $type;
@@ -100,9 +100,9 @@ class ImageFactory {
     //
     $handle = do_image_open($filename, $type);
     if ($handle) {
-      $g_image_cache[$url] =& new Image($handle,
-                                        $filename,
-                                        $type);
+      $g_image_cache[$url] = new Html2PsImage($handle,
+                                              $filename,
+                                              $type);
     } else {
       $g_image_cache[$url] = null;
     };

@@ -106,6 +106,7 @@ class MarginValue extends CSSValue {
     $value->right  = MarginSideValue::init($data[1]);
     $value->bottom = MarginSideValue::init($data[2]);
     $value->left   = MarginSideValue::init($data[3]);
+
     return $value;
   }
 

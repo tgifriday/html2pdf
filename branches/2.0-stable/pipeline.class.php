@@ -322,7 +322,7 @@ class Pipeline {
 
     $this->pre_tree_filters = array();
 
-    $this->_dispatcher =& new Dispatcher();
+    $this->_dispatcher = new Html2PsDispatcher();
 
     $this->_dispatcher->add_event('before-page-heights');
     $this->_dispatcher->add_event('before-page');

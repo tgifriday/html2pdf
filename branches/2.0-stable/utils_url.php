@@ -8,13 +8,17 @@ function guess_url($path, $baseurl) {
     return $path;
   };
 
+  // MID hack
+  if ($path[0] == '/') {
+    $guessed = BASE_HOST . $path;
+    return $guessed;
+  };
+
   $data   = parse_url($baseurl);
 
-  $default_host = array(
-                        'http'  => 'localhost',
+  $default_host = array('http'  => 'localhost',
                         'https' => 'localhost',
-                        'file'  => ''
-                        );
+                        'file'  => '');
 
   $base_scheme = isset($data['scheme']) ? $data['scheme']   : "http";
   $base_port   = isset($data['port'])   ? ":".$data['port'] : "";

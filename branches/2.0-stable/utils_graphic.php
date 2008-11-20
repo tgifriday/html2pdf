@@ -43,8 +43,8 @@ function do_image_open_wrapped($filename, &$type) {
   case 3: // PNG
     $type = 'image/png';
     $image = imagecreatefrompng($filename);
-//     imagealphablending($image, false);
-//     imagesavealpha($image, true);
+    imagealphablending($image, false);
+    imagesavealpha($image, true);
     return $image;
   case 15: // WBMP
     $type = 'image/png';

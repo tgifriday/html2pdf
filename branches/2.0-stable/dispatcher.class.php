@@ -1,9 +1,9 @@
 <?php
 
-class Dispatcher {
+class Html2PsDispatcher {
   var $_callbacks;
 
-  function Dispatcher() {
+  function Html2PsDispatcher() {
     $this->_callbacks = array();
   }
 
