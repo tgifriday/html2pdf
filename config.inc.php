@@ -130,7 +130,9 @@ define('HTML2PS_CONNECTION_TIMEOUT', 10);
 
 // directory to restrict 'file://' access to
 // empty string for no restrictions
-define('FILE_PROTOCOL_RESTRICT', HTML2PS_DIR);
+if (!defined('FILE_PROTOCOL_RESTRICT')) {
+  define('FILE_PROTOCOL_RESTRICT', HTML2PS_DIR);
+};
 
 define('FOOTNOTE_LINE_PERCENT', 30);
 define('FOOTNOTE_LINE_TOP_GAP', 1); // Content points

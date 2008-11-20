@@ -302,6 +302,7 @@ class FetcherUrl extends Fetcher {
 
     $normalized_path = realpath(urldecode($path));
     $normalized_path_part = substr($normalized_path, 0, strlen(FILE_PROTOCOL_RESTRICT));
+
     if ($normalized_path_part !== FILE_PROTOCOL_RESTRICT) {
       error_log(sprintf("Access denied to file '%s'", $normalized_path));
 

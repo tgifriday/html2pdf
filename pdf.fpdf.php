@@ -1035,6 +1035,8 @@ EOF
 
   class FPDF {
     //Private properties
+
+    var $tmpFiles = array(); // Temporary files (used e.g. in alpha image processing).
     
     var $page;               //current page number
     var $n;                  //current object number
@@ -1769,6 +1771,11 @@ EOF
       $this->_endpage();
       //Close document
       $this->_enddoc();
+
+      // Cleanup temp files
+      foreach ($this->tmpFiles as $tmp) {
+        @unlink($tmp); 
+      };
     }
 
     function AddPage($width = null, $height = null) {
@@ -2078,9 +2085,6 @@ EOF
       $this->_out($s);
     }
 
-    /**
-     * Accepts PNG images only
-     */
     function Image($file, $x, $y, $w, $h) {
       // Image used first time, parse input file
       if (!isset($this->images[$file])) {
@@ -2092,6 +2096,9 @@ EOF
           break;
         case 'png':
           $info = $this->_parsepng($file);
+          if ($info == 'alpha') {
+            return $this->ImagePngWithAlpha($file, $x, $y, $w, $h); 
+          };
           break;
         };
 
@@ -2107,6 +2114,110 @@ EOF
                           ($this->h-($y+$h))*$this->k,
                           $info['i']));
     }
+
+    function ImageAlpha($file, $x, $y, $w, $h) {
+      // Image used first time, parse input file
+      if (!isset($this->images[$file])) {
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        switch ($ext) {
+        case 'jpg':
+        case 'jpeg':
+          $info = $this->_parsejpg($file);
+          break;
+        case 'png':
+          $info = $this->_parsepng($file);
+          break;
+        };
+
+        $info['cs'] = "DeviceGray";
+        $info['i'] = count($this->images) + 1;
+        $this->images[$file] = $info;
+      };
+
+      $info = $this->images[$file];
+
+      $x = $this->fwPt + 10;
+      $this->_out(sprintf('q %.2f 0 0 %.2f %.2f %.2f cm /I%d Do Q',
+                          $w * $this->k,
+                          $h * $this->k,
+                          $x * $this->k,
+                          ($this->h-($y+$h))*$this->k,
+                          $info['i']));
+
+      return $info['i'];
+    }
+
+    function ImageWithAlpha($file, $x, $y, $w, $h, $alpha) {
+      // Image used first time, parse input file
+      if (!isset($this->images[$file])) {
+        $ext = pathinfo($file, PATHINFO_EXTENSION);
+        switch ($ext) {
+        case 'jpg':
+        case 'jpeg':
+          $info = $this->_parsejpg($file);
+          break;
+        case 'png':
+          $info = $this->_parsepng($file);
+          break;
+        };
+
+        $info['i'] = count($this->images) + 1;
+        $info['masked'] = $alpha;
+        $this->images[$file] = $info;
+      };
+
+      $info = $this->images[$file];
+      $this->_out(sprintf('q %.2f 0 0 %.2f %.2f %.2f cm /I%d Do Q',
+                          $w*$this->k,
+                          $h*$this->k,
+                          $x*$this->k,
+                          ($this->h-($y+$h))*$this->k,
+                          $info['i']));
+    }
+
+    function ImagePngWithAlpha($file, $x, $y, $w, $h) {
+      $tmp_alpha = tempnam('.', 'mska') . '.png';
+      $this->tmpFiles[] = $tmp_alpha;
+      $tmp_plain = tempnam('.', 'mskp') . '.png';
+      $this->tmpFiles[] = $tmp_plain;
+      
+      list($wpx, $hpx) = getimagesize($file);
+      $img = imagecreatefrompng($file);
+      $alpha_img = imagecreate( $wpx, $hpx );
+    
+      // generate gray scale pallete
+      for($c=0; $c<256; $c++) {
+        ImageColorAllocate($alpha_img, $c, $c, $c);
+      };
+    
+      // extract alpha channel
+      $xpx=0;
+      while ($xpx < $wpx) {
+        $ypx = 0;
+        while ($ypx < $hpx) {
+          $color_index = imagecolorat($img, $xpx, $ypx);
+          $col = imagecolorsforindex($img, $color_index);
+          imagesetpixel($alpha_img, $xpx, $ypx, $this->_gamma( (127-$col['alpha'])*255/127)  );
+          ++$ypx;
+        }
+        ++$xpx;
+      }
+
+      imagepng($alpha_img, $tmp_alpha);
+      imagedestroy($alpha_img);
+      
+      // extract image without alpha channel
+      $plain_img = imagecreatetruecolor ( $wpx, $hpx );
+      imagecopy ($plain_img, $img, 0, 0, 0, 0, $wpx, $hpx );
+      imagepng($plain_img, $tmp_plain);
+      imagedestroy($plain_img);
+    
+      // first embed mask image (w, h, x, will be ignored)
+      $maskImg = $this->ImageAlpha($tmp_alpha, $x, $y, $w, $h);
+    
+      //embed image, masked with previously embedded mask
+      $this->ImageWithAlpha($tmp_plain, $x, $y, $w, $h, $maskImg);
+    } 
 
     /**
      * @param $name String file to save generated PDF in
@@ -2344,6 +2455,9 @@ EOF
         $this->_out('/Subtype /Image');
         $this->_out('/Width '.$info['w']);
         $this->_out('/Height '.$info['h']);
+
+        if (isset($info["masked"])) $this->_out('/SMask '.($this->n-1).' 0 R'); ### 
+
         if ($info['cs']=='Indexed') {
           $this->_out('/ColorSpace [/Indexed /DeviceRGB '.(strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
         } else {
@@ -2626,7 +2740,8 @@ EOF
       } elseif($ct==3) {
         $colspace='Indexed';
       } else {
-        $this->Error('Alpha channel not supported: '.$file);
+        fclose($f);      
+        return 'alpha';  
       };
 
       if (ord(fread($f,1))!=0) {
@@ -2733,6 +2848,11 @@ EOF
         $this->buffer.=$s."\n";
       }
     }
+
+    // GD seems to use a different gamma, this method is used to correct it again
+    function _gamma($v){
+      return pow ($v/255, 2.2) * 255;
+    } 
   }
 }
 ?>
